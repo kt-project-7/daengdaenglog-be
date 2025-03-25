@@ -463,3 +463,73 @@ spec:
           env:
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
               value: kafka:9092
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: application-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /admin(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: admin-service
+                port:
+                  number: 8080
+          - path: /auth(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 8080
+          - path: /diary(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: diary-service
+                port:
+                  number: 8080
+          - path: /guide(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: guide-service
+                port:
+                  number: 8080
+          - path: /letter(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: letter-service
+                port:
+                  number: 8080
+          - path: /memory(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: memory-service
+                port:
+                  number: 8080
+          - path: /pet(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: pet-service
+                port:
+                  number: 8080
+
+# minikube start
+# kubectl apply -f k8s.yml
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml --validate=false
+# 이후 sudo minikube tunnel 명령어로 localhost 접속 가능
+
+# kubectl port-forward service/guide-service 8081:8080
