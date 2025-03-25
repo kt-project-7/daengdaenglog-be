@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    restart: always
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    restart: always
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  admin-service:
+    image: leedy3838/admin-service:dev
+    container_name: admin-service
+    restart: always
+    depends_on:
+      - kafka
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+  auth-service:
+    image: leedy3838/auth-service:dev
+    container_name: auth-service
+    restart: always
+    depends_on:
+      - kafka
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+  diary-service:
+    image: leedy3838/diary-service:dev
+    container_name: diary-service
+    restart: always
+    depends_on:
+      - kafka
+    ports:
+      - "8083:8080"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+  guide-service:
+    image: leedy3838/guide-service:dev
+    container_name: guide-service
+    restart: always
+    depends_on:
+      - kafka
+    ports:
+      - "8084:8080"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+  letter-service:
+    image: leedy3838/letter-service:dev
+    container_name: letter-service
+    restart: always
+    depends_on:
+      - kafka
+    ports:
+      - "8085:8080"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+  memory-service:
+    image: leedy3838/memory-service:dev
+    container_name: memory-service
+    restart: always
+    depends_on:
+      - kafka
+    ports:
+      - "8086:8080"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+  pbti-service:
+    image: leedy3838/pbti-service:dev
+    container_name: pbti-service
+    restart: always
+    depends_on:
+      - kafka
+    ports:
+      - "8087:8080"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+  pet-service:
+    image: leedy3838/pet-service:dev
+    container_name: pet-service
+    restart: always
+    depends_on:
+      - kafka
+    ports:
+      - "8088:8080"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
