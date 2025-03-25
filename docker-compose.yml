@@ -48,7 +48,7 @@ services:
       - kafka
       - postgres
     ports:
-      - "8081:8081"
+      - "8081:8080"
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
 
