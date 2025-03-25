@@ -1,0 +1,11 @@
+rootProject.name = 'be'
+include 'common'
+include 'admin'
+include 'auth'
+include 'pet'
+include 'diary'
+include 'pbti'
+include 'letter'
+include 'guide'
+include 'memory'
+
