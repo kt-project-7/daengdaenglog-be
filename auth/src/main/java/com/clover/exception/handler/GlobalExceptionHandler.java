@@ -1,6 +1,6 @@
 package com.clover.exception.handler;
 
-import com.clover.exception.EmailNotFoundException;
+import com.clover.exception.PhoneNumberNotFoundException;
 import com.clover.exception.InvalidPasswordException;
 import com.clover.exception.TokenNotValidException;
 import com.clover.exception.UserNotFoundException;
@@ -10,7 +10,6 @@ import com.clover.exception.response.ErrorResponse;
 import com.clover.exception.response.ErrorResponse.ValidationError;
 import com.clover.exception.response.ErrorResponse.ValidationErrors;
 import com.clover.util.JwtTokenProvider;
-import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -28,7 +27,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.List;
 
-@Hidden
 @RequiredArgsConstructor
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -57,8 +55,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(e.getErrorCode());
     }
 
-    @ExceptionHandler(EmailNotFoundException.class)
-    public ResponseEntity<Object> handleEmailNotFound(EmailNotFoundException e, HttpServletRequest request) {
+    @ExceptionHandler(PhoneNumberNotFoundException.class)
+    public ResponseEntity<Object> handleEmailNotFound(PhoneNumberNotFoundException e, HttpServletRequest request) {
         logInfo(e.getErrorCode(), e, request);
         return handleExceptionInternal(e.getErrorCode());
     }

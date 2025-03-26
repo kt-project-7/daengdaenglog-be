@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class EmailNotFoundException extends RuntimeException{
+public class PhoneNumberNotFoundException extends RuntimeException{
     private final ErrorCode errorCode;
 }

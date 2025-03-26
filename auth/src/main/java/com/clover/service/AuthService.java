@@ -31,7 +31,12 @@ public class AuthService {
     ) {
         User user = userService.findByPhoneNumber(request.phoneNumber());
 
-        if (!passwordEncoder.matches(request.phoneNumber(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
+            log.info("user password: {}", user.getPassword());
+            log.info("password: {}", passwordEncoder.encode(request.password()));
+
+            log.info("original: {}", request.password());
+
             throw new InvalidPasswordException(AuthErrorCode.INVALID_PASSWORD);
         }
 

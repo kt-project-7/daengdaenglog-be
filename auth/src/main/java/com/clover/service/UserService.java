@@ -1,7 +1,7 @@
 package com.clover.service;
 
 import com.clover.domain.User;
-import com.clover.exception.EmailNotFoundException;
+import com.clover.exception.PhoneNumberNotFoundException;
 import com.clover.exception.UserNotFoundException;
 import com.clover.exception.errorcode.AuthErrorCode;
 import com.clover.exception.errorcode.UserErrorCode;
@@ -24,6 +24,6 @@ public class UserService {
 
     User findByPhoneNumber(String phoneNumber) {
         return userRepository.findByPhoneNumber(phoneNumber)
-                .orElseThrow(() -> new EmailNotFoundException(AuthErrorCode.EMAIL_NOT_FOUND));
+                .orElseThrow(() -> new PhoneNumberNotFoundException(AuthErrorCode.PHONE_NUMBER_NOT_FOUND));
     }
 }
