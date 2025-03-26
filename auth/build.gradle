@@ -14,6 +14,11 @@ dependencies {
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    //jwt
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 }
 
 tasks.register('copyConfig', Copy) {

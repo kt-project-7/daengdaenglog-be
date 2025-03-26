@@ -69,7 +69,7 @@ subprojects { // 모든 하위 모듈들에 이 설정을 적용합니다.
 		testImplementation 'org.springframework.kafka:spring-kafka-test'
 
 		//swagger
-		implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4'
+		implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
 
 		//openfeign
 		implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'

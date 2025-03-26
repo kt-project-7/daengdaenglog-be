@@ -184,6 +184,7 @@ spec:
       containers:
         - name: admin-service
           image: leedy3838/admin-service:dev
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
@@ -229,6 +230,7 @@ spec:
       containers:
         - name: auth-service
           image: leedy3838/auth-service:dev
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
@@ -275,6 +277,7 @@ spec:
       containers:
         - name: diary-service
           image: leedy3838/diary-service:dev
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
@@ -321,6 +324,7 @@ spec:
       containers:
         - name: guide-service
           image: leedy3838/guide-service:dev
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
@@ -367,6 +371,7 @@ spec:
       containers:
         - name: letter-service
           image: leedy3838/letter-service:dev
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
@@ -413,6 +418,7 @@ spec:
       containers:
         - name: memory-service
           image: leedy3838/memory-service:dev
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
@@ -458,6 +464,7 @@ spec:
       containers:
         - name: pet-service
           image: leedy3838/pet-service:dev
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
