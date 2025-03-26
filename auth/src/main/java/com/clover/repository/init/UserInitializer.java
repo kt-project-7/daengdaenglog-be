@@ -38,7 +38,7 @@ public class UserInitializer implements ApplicationRunner {
                 .userType(UserType.ADMIN)
                 .imageUri("https://www.google.com")
                 .password(passwordEncoder.encode("password"))
-                .phoneNumber("010-1234-5678")
+                .phoneNumber("01012345678")
                 .build();
 
         User user2 = User.builder()
@@ -47,7 +47,7 @@ public class UserInitializer implements ApplicationRunner {
                 .userType(UserType.USER)
                 .imageUri("https://www.google.com")
                 .password(passwordEncoder.encode("password"))
-                .phoneNumber("010-2345-6789")
+                .phoneNumber("01023456789")
                 .build();
 
         User user3 = User.builder()
@@ -56,7 +56,7 @@ public class UserInitializer implements ApplicationRunner {
                 .userType(UserType.USER)
                 .imageUri("https://www.google.com")
                 .password(passwordEncoder.encode("password"))
-                .phoneNumber("010-3456-7890")
+                .phoneNumber("01034567890")
                 .build();
 
         userList.add(user1);

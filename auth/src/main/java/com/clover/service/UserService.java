@@ -17,12 +17,12 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    User findById(Long userId) {
+    public User findById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(UserErrorCode.USER_NOT_FOUND));
     }
 
-    User findByPhoneNumber(String phoneNumber) {
+    public User findByPhoneNumber(String phoneNumber) {
         return userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new PhoneNumberNotFoundException(AuthErrorCode.PHONE_NUMBER_NOT_FOUND));
     }
