@@ -24,7 +24,7 @@ public class DiaryController {
 
     @Operation(summary = "펫 다이어리 리스트 조회", description = "처음 펫 다이어리 리스트 조회")
     @GetMapping
-    public ResponseEntity<ResponseTemplate<?>> getPetDiaryList(Long userId, int size) {
+    public ResponseEntity<ResponseTemplate<?>> getPetDiaryList(@RequestParam Long userId, @RequestParam int size) {
         PetDiaryListResponse petDiaryList = diaryService.getPetDiaryList(userId, size);
 
         return ResponseEntity
@@ -34,7 +34,7 @@ public class DiaryController {
 
     @Operation(summary = "펫 다이어리 페이징 조회", description = "각각의 펫 다이어리 페이징 조회")
     @GetMapping("/{petId}")
-    public ResponseEntity<ResponseTemplate<?>> getPetDiaryListPaging(@PathVariable Long petId, int page, int size) {
+    public ResponseEntity<ResponseTemplate<?>> getPetDiaryListPaging(@PathVariable Long petId, @RequestParam int page, @RequestParam int size) {
         DiarySimpleListResponse diaryListPaging = diaryService.getDiaryListPaging(petId, page, size);
 
         return ResponseEntity

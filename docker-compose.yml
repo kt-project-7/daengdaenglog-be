@@ -88,42 +88,6 @@ services:
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
 
-  letter-service:
-    image: leedy3838/letter-service:dev
-    container_name: letter-service
-    restart: always
-    depends_on:
-      - kafka
-      - postgres
-    ports:
-      - "8085:8080"
-    environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-
-  memory-service:
-    image: leedy3838/memory-service:dev
-    container_name: memory-service
-    restart: always
-    depends_on:
-      - kafka
-      - postgres
-    ports:
-      - "8086:8080"
-    environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-
-  pbti-service:
-    image: leedy3838/pbti-service:dev
-    container_name: pbti-service
-    restart: always
-    depends_on:
-      - kafka
-      - postgres
-    ports:
-      - "8087:8080"
-    environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
-
   pet-service:
     image: leedy3838/pet-service:dev
     container_name: pet-service
@@ -132,7 +96,7 @@ services:
       - kafka
       - postgres
     ports:
-      - "8088:8080"
+      - "8085:8080"
     environment:
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
 
