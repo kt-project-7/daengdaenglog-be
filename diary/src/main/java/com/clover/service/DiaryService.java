@@ -1,5 +1,6 @@
 package com.clover.service;
 
+import com.clover.dto.request.CreateDiaryRequest;
 import com.clover.dto.response.DiarySimpleListResponse;
 import com.clover.dto.response.PetDiaryListResponse;
 import com.clover.dto.response.DiarySimpleResponse;
@@ -9,6 +10,7 @@ import com.clover.service.client.PetClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -35,5 +37,11 @@ public class DiaryService {
 
     public DiarySimpleListResponse getDiaryListPaging(Long petId, int page, int size) {
         return DiarySimpleListResponse.from(diaryRepository.getDiaryList(petId, page, size));
+    }
+
+    @Transactional
+    public void createDiary(CreateDiaryRequest request) {
+        //TODO: request에 있는 petId가 유효한지 확인 로직 추가
+        diaryRepository.save(request.toEntity());
     }
 }
