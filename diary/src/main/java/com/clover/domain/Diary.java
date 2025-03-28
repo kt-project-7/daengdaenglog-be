@@ -1,5 +1,7 @@
 package com.clover.domain;
 
+import com.clover.domain.type.EmotionType;
+import com.clover.domain.type.WeatherType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,12 +22,22 @@ public class Diary extends BaseTimeEntity {
     @Column(name = "pet_id", nullable = false)
     private Long petId;
 
+    @Column(name = "emotion_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EmotionType emotionType;
+
+    @Column(name = "weather_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private WeatherType weatherType;
+
     @Column(name = "content", nullable = false)
     private String content;
 
     @Builder
-    public Diary(Long petId, String content) {
+    public Diary(Long petId, EmotionType emotionType, WeatherType weatherType, String content) {
         this.petId = petId;
+        this.emotionType = emotionType;
+        this.weatherType = weatherType;
         this.content = content;
     }
 }

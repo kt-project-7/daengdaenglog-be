@@ -60,10 +60,57 @@ public class CodeInitializer implements ApplicationRunner {
                 .value("CAT")
                 .description("고양이 코드")
                 .build();
-        Code bird = Code.builder()
-                .code("PT-003")
-                .value("BIRD")
-                .description("새 코드")
+
+        Code petScheduleWalk = Code.builder()
+                .code("PT-SCH-001")
+                .value("WALK")
+                .description("산책 코드")
+                .build();
+        Code petScheduleFeed = Code.builder()
+                .code("PT-SCH-002")
+                .value("FEED")
+                .description("먹이 주기 코드")
+                .build();
+
+        Code petEmotionHappy = Code.builder()
+                .code("PT-EMO-001")
+                .value("HAPPY")
+                .description("행복한 감정 코드")
+                .build();
+        Code petEmotionSad = Code.builder()
+                .code("PT-EMO-002")
+                .value("SAD")
+                .description("슬픈 감정 코드")
+                .build();
+        Code petEmotionAngry = Code.builder()
+                .code("PT-EMO-003")
+                .value("ANGRY")
+                .description("화난 감정 코드")
+                .build();
+        Code petEmotionSurprised = Code.builder()
+                .code("PT-EMO-004")
+                .value("SURPRISED")
+                .description("놀란 감정 코드")
+                .build();
+        Code petEmotionHungry = Code.builder()
+                .code("PT-EMO-005")
+                .value("HUNGRY")
+                .description("배고픈 감정 코드")
+                .build();
+        Code petEmotionSick = Code.builder()
+                .code("PT-EMO-006")
+                .value("SICK")
+                .description("아픈 감정 코드")
+                .build();
+        Code petEmotionLove = Code.builder()
+                .code("PT-EMO-007")
+                .value("LOVE")
+                .description("사랑하는 감정 코드")
+                .build();
+        Code petEmotionSleepy = Code.builder()
+                .code("PT-EMO-008")
+                .value("SLEEPY")
+                .description("졸린 감정 코드")
                 .build();
 
         Code insuranceGroup = Code.builder()
@@ -89,7 +136,18 @@ public class CodeInitializer implements ApplicationRunner {
         codeList.add(petGroup);
         codeList.add(dog);
         codeList.add(cat);
-        codeList.add(bird);
+
+        codeList.add(petScheduleWalk);
+        codeList.add(petScheduleFeed);
+
+        codeList.add(petEmotionHappy);
+        codeList.add(petEmotionSad);
+        codeList.add(petEmotionAngry);
+        codeList.add(petEmotionSurprised);
+        codeList.add(petEmotionHungry);
+        codeList.add(petEmotionSick);
+        codeList.add(petEmotionLove);
+        codeList.add(petEmotionSleepy);
 
         codeList.add(insuranceGroup);
         codeList.add(death);

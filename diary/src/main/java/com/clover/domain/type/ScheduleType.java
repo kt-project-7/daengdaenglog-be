@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public enum PetType {
-    DOG("PT-001", "강아지"),
-    CAT("PT-002", "고양이"),
+public enum ScheduleType {
+    WALK("PT-SCH-001", "산책"),
+    FEED("PT-SCH-002", "밥주기"),
     ;
 
     private final String code;
