@@ -333,99 +333,6 @@ spec:
 
 ---
 
-# letter-service
-apiVersion: v1
-kind: Service
-metadata:
-  name: letter-service
-spec:
-  ports:
-    - port: 8080
-      targetPort: 8080
-  selector:
-    app: letter-service
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: letter-service-deployment
-  labels:
-    app: letter-service
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: letter-service
-  template:
-    metadata:
-      labels:
-        app: letter-service
-    spec:
-      initContainers:
-        - name: wait-for-kafka
-          image: busybox
-          command: ['sh', '-c', 'until nc -z kafka-service 9092; do echo waiting for kafka...; sleep 2; done']
-        - name: wait-for-postgres
-          image: busybox
-          command: ['sh', '-c', 'until nc -z postgres 5432; do echo waiting for postgres...; sleep 2; done']
-      containers:
-        - name: letter-service
-          image: leedy3838/letter-service:dev
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 8080
-          env:
-            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
-              value: kafka:9092
-
----
-
-# memory-service
-apiVersion: v1
-kind: Service
-metadata:
-  name: memory-service
-spec:
-  ports:
-    - port: 8080
-      targetPort: 8080
-  selector:
-    app: memory-service
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: memory-service-deployment
-  labels:
-    app: memory-service
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: memory-service
-  template:
-    metadata:
-      labels:
-        app: memory-service
-    spec:
-      initContainers:
-        - name: wait-for-kafka
-          image: busybox
-          command: ['sh', '-c', 'until nc -z kafka-service 9092; do echo waiting for kafka...; sleep 2; done']
-        - name: wait-for-postgres
-          image: busybox
-          command: ['sh', '-c', 'until nc -z postgres 5432; do echo waiting for postgres...; sleep 2; done']
-      containers:
-        - name: memory-service
-          image: leedy3838/memory-service:dev
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 8080
-          env:
-            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
-              value: kafka:9092
-
----
 # pet-service
 apiVersion: v1
 kind: Service
@@ -479,6 +386,8 @@ kind: Service
 metadata:
   name: gateway-service
 spec:
+  type:
+    LoadBalancer
   ports:
     - port: 8080
       targetPort: 8080

@@ -17,15 +17,16 @@ public class Memory extends BaseTimeEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "diary_id", nullable = false)
-    private Long diaryId;
+    @JoinColumn(name = "diary_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Diary diary;
 
     @Column(name = "image_uri", nullable = false)
     private String imageUri;
 
     @Builder
-    public Memory(Long diaryId, String imageUri) {
-        this.diaryId = diaryId;
+    public Memory(Diary diary, String imageUri) {
+        this.diary = diary;
         this.imageUri = imageUri;
     }
 }
