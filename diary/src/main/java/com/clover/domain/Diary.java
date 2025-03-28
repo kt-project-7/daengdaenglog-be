@@ -30,14 +30,18 @@ public class Diary extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private WeatherType weatherType;
 
+    @Column(name = "title", nullable = false)
+    private String title;
+
     @Column(name = "content", nullable = false)
     private String content;
 
     @Builder
-    public Diary(Long petId, EmotionType emotionType, WeatherType weatherType, String content) {
+    public Diary(Long petId, EmotionType emotionType, WeatherType weatherType, String title, String content) {
         this.petId = petId;
         this.emotionType = emotionType;
         this.weatherType = weatherType;
+        this.title = title;
         this.content = content;
     }
 }

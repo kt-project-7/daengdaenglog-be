@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@Order(2)
+@Order(1)
 @DummyDataInit
 public class UserInitializer implements ApplicationRunner {
 
