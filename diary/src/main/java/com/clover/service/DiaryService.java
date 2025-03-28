@@ -1,9 +1,9 @@
 package com.clover.service;
 
+import com.clover.dto.response.DiarySimpleListResponse;
 import com.clover.dto.response.PetDiaryListResponse;
 import com.clover.dto.response.DiarySimpleResponse;
 import com.clover.dto.response.PetDiaryResponse;
-import com.clover.dto.response.feign.FeignPetInfoResponse;
 import com.clover.repository.DiaryRepository;
 import com.clover.service.client.PetClient;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +23,7 @@ public class DiaryService {
     public PetDiaryListResponse getPetDiaryList(
             Long userId, int size
     ) {
-        List<FeignPetInfoResponse> petInfoList = petClient.getPetIdList(userId);
-
-        petInfoList.forEach(petInfo -> log.info("petInfo: {}", petInfo));
-
-        List<PetDiaryResponse> list = petInfoList.stream()
+        List<PetDiaryResponse> list = petClient.getPetIdList(userId).stream()
                 .map(petInfo -> {
                     List<DiarySimpleResponse> diaryList = diaryRepository.getDiaryList(petInfo.petId(), 0, size);
                     return PetDiaryResponse.of(petInfo, diaryList);
@@ -35,5 +31,9 @@ public class DiaryService {
                 .toList();
 
         return PetDiaryListResponse.from(list);
+    }
+
+    public DiarySimpleListResponse getDiaryListPaging(Long petId, int page, int size) {
+        return DiarySimpleListResponse.from(diaryRepository.getDiaryList(petId, page, size));
     }
 }
