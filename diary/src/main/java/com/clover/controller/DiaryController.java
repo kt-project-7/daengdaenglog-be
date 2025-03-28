@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "DiaryController", description = "Diary 관련 API")
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping(path = "/diary")
+@RequestMapping
 @RestController
 public class DiaryController {
 
@@ -42,6 +42,7 @@ public class DiaryController {
                 .body(ResponseTemplate.from(diaryListPaging));
     }
 
+    //TODO: 여기 EmotionType 등 다 적어주기
     @Operation(summary = "펫 다이어리 생성", description = "펫 다이어리 생성")
     @PostMapping
     public ResponseEntity<ResponseTemplate<?>> createDiary(@RequestBody CreateDiaryRequest request) {

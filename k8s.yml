@@ -473,67 +473,43 @@ spec:
 
 ---
 
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+# gateway-service
+apiVersion: v1
+kind: Service
 metadata:
-  name: application-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  name: gateway-service
 spec:
-  ingressClassName: nginx
-  rules:
-    - host: localhost
-      http:
-        paths:
-          - path: /admin(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: admin-service
-                port:
-                  number: 8080
-          - path: /auth(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: auth-service
-                port:
-                  number: 8080
-          - path: /diary(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: diary-service
-                port:
-                  number: 8080
-          - path: /guide(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: guide-service
-                port:
-                  number: 8080
-          - path: /letter(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: letter-service
-                port:
-                  number: 8080
-          - path: /memory(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: memory-service
-                port:
-                  number: 8080
-          - path: /pet(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: pet-service
-                port:
-                  number: 8080
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: gateway-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-service-deployment
+  labels:
+    app: gateway-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-service
+  template:
+    metadata:
+      labels:
+        app: gateway-service
+    spec:
+      containers:
+        - name: gateway-service
+          image: leedy3838/gateway-service:dev
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092
 
 # minikube start
 # kubectl apply -f k8s.yml
