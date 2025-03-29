@@ -55,7 +55,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public boolean validateToken(String token) {
+    public String validateToken(String token) {
         try {
             Jws<Claims> claims = Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -63,11 +63,15 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token);
 
             log.info("login user: {}", claims.getBody().getSubject());
-            return claims.getBody().getExpiration().after(new Date());
+            if (!claims.getBody().getExpiration().after(new Date())) {
+                return getUserId(token);
+            }
         } catch (Exception e) {
             log.error("Token validation error: ", e);
-            return false;
+            return "0";
         }
+
+        return "0";
     }
 
     public String getUserId(String token) {

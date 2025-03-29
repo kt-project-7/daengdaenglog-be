@@ -2,6 +2,7 @@ package com.clover.service;
 
 import com.clover.domain.User;
 import com.clover.dto.request.SignInRequest;
+import com.clover.dto.response.AuthResponse;
 import com.clover.dto.response.SignInResponse;
 import com.clover.exception.InvalidPasswordException;
 import com.clover.exception.TokenNotValidException;
@@ -42,8 +43,10 @@ public class AuthService {
         return SignInResponse.of(user.getName(), user.getImageUri());
     }
 
-    public boolean validateToken(String token) {
-        return jwtTokenProvider.validateToken(resolveToken(token));
+    public AuthResponse validateToken(String token) {
+        String parseToken = resolveToken(token);
+
+        return AuthResponse.from(jwtTokenProvider.validateToken(parseToken));
     }
 
     private String resolveToken(String token) {

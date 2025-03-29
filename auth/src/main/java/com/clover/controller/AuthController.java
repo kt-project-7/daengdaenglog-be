@@ -2,6 +2,7 @@ package com.clover.controller;
 
 import com.clover.dto.ResponseTemplate;
 import com.clover.dto.request.SignInRequest;
+import com.clover.dto.response.AuthResponse;
 import com.clover.dto.response.SignInResponse;
 import com.clover.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping
 public class AuthController {
 
     private final AuthService authService;
@@ -42,7 +43,7 @@ public class AuthController {
 
     @Operation(summary = "토큰 유효성 검사", description = "토큰 유효성 검사")
     @GetMapping("/validate-token")
-    public boolean validateToken(@RequestHeader("Authorization") String token) {
+    public AuthResponse validateToken(@RequestHeader("Authorization") String token) {
         return authService.validateToken(token);
     }
 }
