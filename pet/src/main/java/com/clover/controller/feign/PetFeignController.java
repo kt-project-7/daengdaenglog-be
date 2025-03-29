@@ -27,4 +27,6 @@ public class PetFeignController {
     public boolean validatePetId(@PathVariable Long petId, @RequestParam Long userId) {
         return feignPetService.validatePetId(petId, userId);
     }
+
+    //TODO: 보험 청구 내역 요청 api - 보험 청구 내역 요청 시 사용(테이블 만들어야 함)
 }

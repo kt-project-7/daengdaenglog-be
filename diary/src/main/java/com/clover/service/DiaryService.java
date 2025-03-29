@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -42,10 +43,14 @@ public class DiaryService {
     }
 
     @Transactional
-    public void createDiary(CreateDiaryRequest request, Long userId) {
+    public void createDiary(CreateDiaryRequest request, MultipartFile file, Long userId) {
         if (!petClient.validatePetId(request.petId(), userId)) {
             throw new PetIdNotMatchException(DiaryErrorCode.PET_ID_NOT_MATCH);
         }
+
+        //TODO: 이미지 저장 로직 추가 - memory 테이블
+        //TODO: 산책한 시간을 여러 개 추가할 수 있게 해야 함. + 밥준 시간도 기록 가능하게
+
         diaryRepository.save(request.toEntity());
     }
 }
