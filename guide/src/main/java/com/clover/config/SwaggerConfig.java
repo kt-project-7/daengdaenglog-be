@@ -16,7 +16,7 @@ import java.util.Collections;
         info = @Info(title = "Guide API 명세서",
                 description = "guide 서비스",
                 version = "v1"),
-        servers = @Server(url = "/", description = "Default Server URL"))
+        servers = @Server(url = "/guide", description = "Default Server URL"))
 @Configuration
 public class SwaggerConfig {
 

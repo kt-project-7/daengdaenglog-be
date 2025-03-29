@@ -16,7 +16,7 @@ import java.util.Collections;
         info = @Info(title = "Pet API 명세서",
                 description = "pet 서비스",
                 version = "v1"),
-        servers = @Server(url = "/", description = "Default Server URL"))
+        servers = @Server(url = "/pet", description = "Default Server URL"))
 @Configuration
 public class SwaggerConfig {
 

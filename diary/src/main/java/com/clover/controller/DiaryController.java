@@ -7,6 +7,7 @@ import com.clover.dto.response.PetDiaryListResponse;
 import com.clover.service.DiaryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,13 @@ public class DiaryController {
 
     @Operation(summary = "펫 다이어리 리스트 조회", description = "처음 펫 다이어리 리스트 조회")
     @GetMapping
-    public ResponseEntity<ResponseTemplate<?>> getPetDiaryList(@RequestParam Long userId, @RequestParam int size) {
+    public ResponseEntity<ResponseTemplate<?>> getPetDiaryList(
+            HttpServletRequest request, @RequestParam int size
+    ) {
+        Long userId = Long.parseLong(request.getHeader("User-Id"));
+
+        log.info("userId: {}", userId);
+
         PetDiaryListResponse petDiaryList = diaryService.getPetDiaryList(userId, size);
 
         return ResponseEntity
@@ -34,7 +41,9 @@ public class DiaryController {
 
     @Operation(summary = "펫 다이어리 페이징 조회", description = "각각의 펫 다이어리 페이징 조회")
     @GetMapping("/{petId}")
-    public ResponseEntity<ResponseTemplate<?>> getPetDiaryListPaging(@PathVariable Long petId, @RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<ResponseTemplate<?>> getPetDiaryListPaging(
+            @PathVariable Long petId, @RequestParam int page, @RequestParam int size
+    ) {
         DiarySimpleListResponse diaryListPaging = diaryService.getDiaryListPaging(petId, page, size);
 
         return ResponseEntity
@@ -45,7 +54,9 @@ public class DiaryController {
     //TODO: 여기 EmotionType 등 다 적어주기
     @Operation(summary = "펫 다이어리 생성", description = "펫 다이어리 생성")
     @PostMapping
-    public ResponseEntity<ResponseTemplate<?>> createDiary(@RequestBody CreateDiaryRequest request) {
+    public ResponseEntity<ResponseTemplate<?>> createDiary(
+            @RequestBody CreateDiaryRequest request
+    ) {
         diaryService.createDiary(request);
 
         return ResponseEntity
