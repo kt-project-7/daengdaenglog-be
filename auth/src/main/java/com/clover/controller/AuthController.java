@@ -44,6 +44,10 @@ public class AuthController {
     @Operation(summary = "토큰 유효성 검사", description = "토큰 유효성 검사")
     @GetMapping("/validate-token")
     public AuthResponse validateToken(@RequestHeader("Authorization") String token) {
-        return authService.validateToken(token);
+        AuthResponse userId = authService.validateToken(token);
+
+        log.info("userId: {}", userId.userId());
+
+        return userId;
     }
 }

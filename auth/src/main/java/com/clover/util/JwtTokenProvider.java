@@ -56,22 +56,20 @@ public class JwtTokenProvider {
     }
 
     public String validateToken(String token) {
-        try {
-            Jws<Claims> claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
+        Jws<Claims> claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token);
 
-            log.info("login user: {}", claims.getBody().getSubject());
-            if (!claims.getBody().getExpiration().after(new Date())) {
-                return getUserId(token);
-            }
-        } catch (Exception e) {
-            log.error("Token validation error: ", e);
+        String userId = claims.getBody().getSubject();
+
+        log.info("login user: {}", userId);
+
+        if (!claims.getBody().getExpiration().after(new Date())) {
             return "0";
         }
 
-        return "0";
+        return userId;
     }
 
     public String getUserId(String token) {
