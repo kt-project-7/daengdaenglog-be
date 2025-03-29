@@ -16,7 +16,7 @@ import java.util.Collections;
         info = @Info(title = "Auth API 명세서",
                 description = "auth 서비스",
                 version = "v1"),
-        servers = @Server(url = "/", description = "Default Server URL"))
+        servers = @Server(url = "/auth", description = "Default Server URL"))
 @Configuration
 public class SwaggerConfig {
 
