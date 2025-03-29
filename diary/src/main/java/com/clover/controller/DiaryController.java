@@ -51,13 +51,17 @@ public class DiaryController {
                 .body(ResponseTemplate.from(diaryListPaging));
     }
 
-    //TODO: 여기 EmotionType 등 다 적어주기
-    @Operation(summary = "펫 다이어리 생성", description = "펫 다이어리 생성")
+    //TODO: 펫 다이어리 상세 조회 - 펫 다이어리는 연결된 추억 그림도 함께 주기
+
+    @Operation(summary = "펫 다이어리 생성", description = "펫 다이어리 생성<br>" +
+            "EmotionType: HAPPY, SAD, ANGRY, SURPRISED, HUNGRY, SICK, LOVE, SLEEPY<br>" +
+            "WeatherType: SUNNY, CLOUDY, RAINY, SNOWY, THUNDER, HAILSTONE, FOG, YELLOW_DUST")
     @PostMapping
     public ResponseEntity<ResponseTemplate<?>> createDiary(
-            @RequestBody CreateDiaryRequest request
+            @RequestBody CreateDiaryRequest createDiaryRequest, HttpServletRequest request
     ) {
-        diaryService.createDiary(request);
+        Long userId = Long.parseLong(request.getHeader("User-Id"));
+        diaryService.createDiary(createDiaryRequest, userId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

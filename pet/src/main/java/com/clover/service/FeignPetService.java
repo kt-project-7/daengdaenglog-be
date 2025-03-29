@@ -25,4 +25,8 @@ public class FeignPetService {
 
         return petInfoList;
     }
+
+    public boolean validatePetId(Long petId, Long userId) {
+        return petRepository.existsByIdAndUserId(petId, userId);
+    }
 }

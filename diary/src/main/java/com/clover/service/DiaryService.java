@@ -5,6 +5,8 @@ import com.clover.dto.response.DiarySimpleListResponse;
 import com.clover.dto.response.PetDiaryListResponse;
 import com.clover.dto.response.DiarySimpleResponse;
 import com.clover.dto.response.PetDiaryResponse;
+import com.clover.exception.PetIdNotMatchException;
+import com.clover.exception.errorcode.DiaryErrorCode;
 import com.clover.repository.DiaryRepository;
 import com.clover.service.client.PetClient;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +42,10 @@ public class DiaryService {
     }
 
     @Transactional
-    public void createDiary(CreateDiaryRequest request) {
-        //TODO: request에 있는 petId가 유효한지 확인 로직 추가
+    public void createDiary(CreateDiaryRequest request, Long userId) {
+        if (!petClient.validatePetId(request.petId(), userId)) {
+            throw new PetIdNotMatchException(DiaryErrorCode.PET_ID_NOT_MATCH);
+        }
         diaryRepository.save(request.toEntity());
     }
 }
