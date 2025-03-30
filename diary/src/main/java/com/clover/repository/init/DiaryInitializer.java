@@ -93,12 +93,21 @@ public class DiaryInitializer implements ApplicationRunner {
                 .content("content6")
                 .build();
 
+        Diary diary7 = Diary.builder()
+                .petId(4L)
+                .emotionType(EmotionType.SAD)
+                .weatherType(WeatherType.RAINY)
+                .title("title6")
+                .content("content6")
+                .build();
+
         diaryList.add(diary1);
         diaryList.add(diary2);
         diaryList.add(diary3);
         diaryList.add(diary4);
         diaryList.add(diary5);
         diaryList.add(diary6);
+        diaryList.add(diary7);
 
         diaryRepository.saveAll(diaryList);
     }

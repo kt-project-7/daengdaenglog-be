@@ -2,6 +2,7 @@ package com.clover.controller;
 
 import com.clover.dto.ResponseTemplate;
 import com.clover.dto.request.CreateDiaryRequest;
+import com.clover.dto.response.DiaryDetailResponse;
 import com.clover.dto.response.DiarySimpleListResponse;
 import com.clover.dto.response.PetDiaryListResponse;
 import com.clover.dto.response.TodayDiaryResponse;
@@ -33,9 +34,6 @@ public class DiaryController {
             @RequestParam int size
     ) {
         Long userId = Long.parseLong(request.getHeader("User-Id"));
-
-        log.info("userId: {}", userId);
-
         PetDiaryListResponse petDiaryList = diaryService.getPetDiaryList(userId, size);
 
         return ResponseEntity
@@ -44,7 +42,7 @@ public class DiaryController {
     }
 
     @Operation(summary = "펫 다이어리 페이징 조회", description = "각각의 펫 다이어리 페이징 조회")
-    @GetMapping("/{petId}")
+    @GetMapping("/pets/{petId}")
     public ResponseEntity<ResponseTemplate<?>> getPetDiaryListPaging(
             @PathVariable Long petId,
             @RequestParam int page,
@@ -57,7 +55,19 @@ public class DiaryController {
                 .body(ResponseTemplate.from(diaryListPaging));
     }
 
-    //TODO: 펫 다이어리 상세 조회(날짜 및 아이디로 조회) - 펫 다이어리는 연결된 추억 그림도 함께 주기 + 밥, 산책 시간도 주기
+    @Operation(summary = "펫 다이어리 상세 조회", description = "memoryId가 0이면 관련 이미지 없는 것, 자기 자신의 펫 다이어리만 조회 가능")
+    @GetMapping("/{diaryId}")
+    public ResponseEntity<ResponseTemplate<?>> getDiaryDetailInfo(
+            HttpServletRequest request,
+            @PathVariable Long diaryId
+    ) {
+        Long userId = Long.parseLong(request.getHeader("User-Id"));
+        DiaryDetailResponse diaryDetailInfo = diaryService.getDiaryDetailInfo(userId, diaryId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.from(diaryDetailInfo));
+    }
 
     @Operation(summary = "오늘 펫 다이어리 작성 여부 확인", description = "오늘 펫 다이어리 작성 여부 확인 - 작성했으면 diaryId 반환 -> 상세 조회 후 수정 가능<br>" +
             "isWrite가 true이면 diaryId가 반환되고, false이면 0이 반환됨")
@@ -67,7 +77,6 @@ public class DiaryController {
             @RequestParam Long petId
     ) {
         Long userId = Long.parseLong(request.getHeader("User-Id"));
-
         TodayDiaryResponse response = diaryService.validateTodayDiary(userId, petId);
 
         return ResponseEntity

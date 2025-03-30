@@ -1,5 +1,6 @@
 package com.clover.exception.handler;
 
+import com.clover.exception.DiaryNotFoundException;
 import com.clover.exception.PetIdNotMatchException;
 import com.clover.exception.errorcode.ErrorCode;
 import com.clover.exception.errorcode.GlobalErrorCode;
@@ -26,6 +27,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(PetIdNotMatchException.class)
     public ResponseEntity<Object> handleEmailNotFound(PetIdNotMatchException e) {
+        return handleExceptionInternal(e.getErrorCode());
+    }
+
+    @ExceptionHandler(DiaryNotFoundException.class)
+    public ResponseEntity<Object> handleDiaryNotFound(DiaryNotFoundException e) {
         return handleExceptionInternal(e.getErrorCode());
     }
 
