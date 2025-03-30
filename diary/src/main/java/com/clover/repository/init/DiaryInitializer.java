@@ -1,7 +1,9 @@
 package com.clover.repository.init;
 
 import com.clover.domain.Diary;
+import com.clover.domain.ScheduleTime;
 import com.clover.domain.type.EmotionType;
+import com.clover.domain.type.ScheduleType;
 import com.clover.domain.type.WeatherType;
 import com.clover.repository.DiaryRepository;
 import com.clover.util.DummyDataInit;
@@ -11,6 +13,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +41,21 @@ public class DiaryInitializer implements ApplicationRunner {
                 .title("title1")
                 .content("content1")
                 .build();
+        ScheduleTime schedule1 = ScheduleTime.builder()
+                .diary(diary1)
+                .scheduleType(ScheduleType.FEED)
+                .startTime(LocalTime.of(12, 0))
+                .endTime(LocalTime.of(13, 0))
+                .build();
+        ScheduleTime schedule2 = ScheduleTime.builder()
+                .diary(diary1)
+                .scheduleType(ScheduleType.WALK)
+                .startTime(LocalTime.of(14, 0))
+                .endTime(LocalTime.of(15, 0))
+                .build();
+        diary1.getScheduleTimeList().add(schedule1);
+        diary1.getScheduleTimeList().add(schedule2);
+
         Diary diary2 = Diary.builder()
                 .petId(1L)
                 .emotionType(EmotionType.HAPPY)

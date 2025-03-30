@@ -1,10 +1,7 @@
 package com.clover.service;
 
 import com.clover.dto.request.CreateDiaryRequest;
-import com.clover.dto.response.DiarySimpleListResponse;
-import com.clover.dto.response.PetDiaryListResponse;
-import com.clover.dto.response.DiarySimpleResponse;
-import com.clover.dto.response.PetDiaryResponse;
+import com.clover.dto.response.*;
 import com.clover.exception.PetIdNotMatchException;
 import com.clover.exception.errorcode.DiaryErrorCode;
 import com.clover.repository.DiaryRepository;
@@ -42,15 +39,26 @@ public class DiaryService {
         return DiarySimpleListResponse.from(diaryRepository.getDiaryList(petId, page, size));
     }
 
+    public TodayDiaryResponse validateTodayDiary(Long userId, Long petId) {
+        validateIsPetOwner(userId, petId);
+
+        return diaryRepository.findTodayDiaryId(petId)
+                .map(diaryId -> TodayDiaryResponse.of(true, diaryId))
+                .orElseGet(() -> TodayDiaryResponse.of(false, 0L));
+    }
+
     @Transactional
     public void createDiary(CreateDiaryRequest request, MultipartFile file, Long userId) {
-        if (!petClient.validatePetId(request.petId(), userId)) {
-            throw new PetIdNotMatchException(DiaryErrorCode.PET_ID_NOT_MATCH);
-        }
+        validateIsPetOwner(userId, request.petId());
 
         //TODO: 이미지 저장 로직 추가 - memory 테이블
-        //TODO: 산책한 시간을 여러 개 추가할 수 있게 해야 함. + 밥준 시간도 기록 가능하게
 
         diaryRepository.save(request.toEntity());
+    }
+
+    private void validateIsPetOwner(Long userId, Long petId) {
+        if (!petClient.validatePetId(petId, userId)) {
+            throw new PetIdNotMatchException(DiaryErrorCode.PET_ID_NOT_MATCH);
+        }
     }
 }

@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Table(name = "diary")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -36,12 +39,22 @@ public class Diary extends BaseTimeEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ScheduleTime> scheduleTimeList = new ArrayList<>();
+
     @Builder
-    public Diary(Long petId, EmotionType emotionType, WeatherType weatherType, String title, String content) {
+    public Diary(Long petId, EmotionType emotionType, WeatherType weatherType, String title, String content, List<ScheduleTime> scheduleTimeList) {
         this.petId = petId;
         this.emotionType = emotionType;
         this.weatherType = weatherType;
         this.title = title;
         this.content = content;
+        this.scheduleTimeList = scheduleTimeList;
+
+        if (scheduleTimeList != null) {
+            scheduleTimeList.forEach(scheduleTime -> scheduleTime.updateDiary(this));
+        } else {
+            this.scheduleTimeList = new ArrayList<>();
+        }
     }
 }

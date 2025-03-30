@@ -38,7 +38,15 @@ public class PetInitializer implements ApplicationRunner {
                 .name("멍멍이")
                 .petType(PetType.DOG)
                 .build();
-        Pet user1Cat = Pet.builder()
+        Pet user1Cat1 = Pet.builder()
+                .userId(1L)
+                .name("야옹이")
+                .imageUri("")
+                .pbti("ENFP")
+                .name("야옹이")
+                .petType(PetType.CAT)
+                .build();
+        Pet user1Cat2 = Pet.builder()
                 .userId(1L)
                 .name("야옹이")
                 .imageUri("")
@@ -65,7 +73,8 @@ public class PetInitializer implements ApplicationRunner {
                 .build();
 
         petList.add(user1Dog);
-        petList.add(user1Cat);
+        petList.add(user1Cat1);
+        petList.add(user1Cat2);
         petList.add(user2Dog);
         petList.add(user2Cat);
 

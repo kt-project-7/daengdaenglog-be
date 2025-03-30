@@ -4,12 +4,15 @@ import com.clover.domain.Diary;
 import com.clover.domain.type.EmotionType;
 import com.clover.domain.type.WeatherType;
 
+import java.util.List;
+
 public record CreateDiaryRequest(
         Long petId,
         EmotionType emotionType,
         WeatherType weatherType,
         String title,
-        String content
+        String content,
+        List<DiaryScheduleRequest> diaryScheduleRequestList
 ) {
 
     public Diary toEntity() {
@@ -19,6 +22,9 @@ public record CreateDiaryRequest(
                 .weatherType(this.weatherType())
                 .title(this.title())
                 .content(this.content())
+                .scheduleTimeList(this.diaryScheduleRequestList().stream()
+                        .map(DiaryScheduleRequest::toEntity)
+                        .toList())
                 .build();
     }
 }
