@@ -1,14 +1,15 @@
 package com.clover.service;
 
 import com.clover.domain.Diary;
-import com.clover.domain.Memory;
+import com.clover.domain.ScheduleTime;
 import com.clover.dto.request.CreateDiaryRequest;
+import com.clover.dto.request.UpdateDiaryRequest;
 import com.clover.dto.response.*;
 import com.clover.exception.DiaryNotFoundException;
 import com.clover.exception.PetIdNotMatchException;
 import com.clover.exception.errorcode.DiaryErrorCode;
 import com.clover.repository.DiaryRepository;
-import com.clover.repository.MemoryRepository;
+import com.clover.repository.ScheduleTimeRepository;
 import com.clover.service.client.PetClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +24,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DiaryService {
 
-    private final MemoryRepository memoryRepository;
     private final DiaryRepository diaryRepository;
+    private final ScheduleTimeRepository scheduleTimeRepository;
     private final PetClient petClient;
 
     /**
@@ -59,9 +60,7 @@ public class DiaryService {
 
         validateIsPetOwner(userId, diary.getPetId());
 
-        Memory memory = memoryRepository.findByDiaryId(diaryId).orElse(null);
-
-        return DiaryDetailResponse.from(diary, memory);
+        return DiaryDetailResponse.from(diary);
     }
 
     /**
@@ -76,13 +75,34 @@ public class DiaryService {
     }
 
     /**
+     * 펫 다이어리 수정
+     */
+    @Transactional
+    public void updateDiary(Long userId, UpdateDiaryRequest request, MultipartFile file) {
+        Diary diary = diaryRepository.findById(request.diaryId())
+                .orElseThrow(() -> new DiaryNotFoundException(DiaryErrorCode.DIARY_NOT_FOUND));
+
+        validateIsPetOwner(userId, diary.getPetId());
+
+        //TODO: file이 있으면 이미지 저장 로직 추가
+        diary.updateDiary(request, null);
+
+        request.diaryScheduleRequestList().forEach(schedule -> {
+            ScheduleTime entity = schedule.toEntity();
+            entity.updateDiary(diary);
+
+            scheduleTimeRepository.save(entity);
+        });
+    }
+
+    /**
      * 펫 다이어리 작성
      */
     @Transactional
     public void createDiary(CreateDiaryRequest request, MultipartFile file, Long userId) {
         validateIsPetOwner(userId, request.petId());
 
-        //TODO: 이미지 저장 로직 추가 - memory 테이블
+        //TODO: 이미지 저장 로직 추가
 
         diaryRepository.save(request.toEntity());
     }

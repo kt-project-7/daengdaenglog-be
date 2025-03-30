@@ -2,6 +2,7 @@ package com.clover.controller;
 
 import com.clover.dto.ResponseTemplate;
 import com.clover.dto.request.CreateDiaryRequest;
+import com.clover.dto.request.UpdateDiaryRequest;
 import com.clover.dto.response.DiaryDetailResponse;
 import com.clover.dto.response.DiarySimpleListResponse;
 import com.clover.dto.response.PetDiaryListResponse;
@@ -84,7 +85,20 @@ public class DiaryController {
                 .body(ResponseTemplate.from(response));
     }
 
-    //TODO: 관찰 일기 수정 api - 밥, 산책 시간도 추가 및 수정 삭제 가능
+    @Operation(summary = "펫 다이어리 수정", description = "자기 자신의 펫 다이어리만 수정 가능")
+    @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<ResponseTemplate<?>> updateDiary(
+            HttpServletRequest request,
+            @RequestPart UpdateDiaryRequest updateDiaryRequest,
+            @RequestPart(required = false) MultipartFile file
+    ) {
+        Long userId = Long.parseLong(request.getHeader("User-Id"));
+        diaryService.updateDiary(userId, updateDiaryRequest, file);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.EMPTY_RESPONSE);
+    }
 
     //TODO: 추억 그림 생성 api - ai를 이용한 추억 그림 생성 및 memory 테이블에 추가
 

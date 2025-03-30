@@ -1,7 +1,6 @@
 package com.clover.dto.response;
 
 import com.clover.domain.Diary;
-import com.clover.domain.Memory;
 import com.clover.domain.type.EmotionType;
 import com.clover.domain.type.WeatherType;
 import lombok.Builder;
@@ -18,12 +17,11 @@ public record DiaryDetailResponse(
         EmotionType emotionType,
         WeatherType weatherType,
         LocalDate createdDate,
-        Long memoryId,
         String memoryUri,
         List<DiaryDetailScheduleResponse> scheduleList
 ) {
 
-    public static DiaryDetailResponse from(Diary diary, Memory memory) {
+    public static DiaryDetailResponse from(Diary diary) {
         return DiaryDetailResponse.builder()
                 .diaryId(diary.getId())
                 .petId(diary.getPetId())
@@ -32,8 +30,7 @@ public record DiaryDetailResponse(
                 .emotionType(diary.getEmotionType())
                 .weatherType(diary.getWeatherType())
                 .createdDate(diary.getCreatedDate().toLocalDate())
-                .memoryId(memory == null ? 0L : memory.getId())
-                .memoryUri(memory == null ? "" : memory.getImageUri())
+                .memoryUri(diary.getMemoryUri())
                 .scheduleList(diary.getScheduleTimeList().stream()
                         .map(DiaryDetailScheduleResponse::from)
                         .toList())
