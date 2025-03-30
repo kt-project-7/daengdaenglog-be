@@ -2,6 +2,7 @@ package com.clover.controller.feign;
 
 import com.clover.dto.response.feign.FeignPetInfoResponse;
 import com.clover.service.FeignPetService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +19,13 @@ public class PetFeignController {
 
     private final FeignPetService feignPetService;
 
+    @Operation(summary = "펫 목록 조회", description = "프론트 사용 X - 백엔드 통신")
     @GetMapping("/pets")
     public List<FeignPetInfoResponse> getPetIdList(@RequestParam Long userId) {
         return feignPetService.getPetIdList(userId);
     }
 
+    @Operation(summary = "펫 주인 검증", description = "프론트 사용 X - 백엔드 통신")
     @GetMapping("/pets/{petId}")
     public boolean validatePetId(@PathVariable Long petId, @RequestParam Long userId) {
         return feignPetService.validatePetId(petId, userId);

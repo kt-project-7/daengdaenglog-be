@@ -41,7 +41,7 @@ public class AuthController {
                 .body(ResponseTemplate.from(selfSignInResponse));
     }
 
-    @Operation(summary = "토큰 유효성 검사", description = "토큰 유효성 검사")
+    @Operation(summary = "토큰 유효성 검사", description = "프론트 사용 X - 백엔드 통신")
     @GetMapping("/validate-token")
     public AuthResponse validateToken(@RequestHeader("Authorization") String token) {
         AuthResponse userId = authService.validateToken(token);
