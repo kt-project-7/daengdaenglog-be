@@ -1,0 +1,243 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: zookeeper
+  name: zookeeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zookeeper
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      containers:
+        - image: wurstmeister/zookeeper
+          imagePullPolicy: IfNotPresent
+          name: zookeeper
+          ports:
+            - containerPort: 2181
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kafka-service
+  name: kafka-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-service
+  template:
+    metadata:
+      labels:
+        app: kafka-service
+    spec:
+      initContainers:
+        - name: wait-for-zookeeper
+          image: busybox
+          command: [ 'sh', '-c', 'until nc -z zookeeper-service 2181; do echo waiting for kafka...; sleep 2; done' ]
+      containers:
+        - env:
+            - name: KAFKA_BROKER_ID
+              value: "1"
+            - name: KAFKA_ZOOKEEPER_CONNECT
+              value: zookeeper-service:2181
+            - name: KAFKA_LISTENERS
+              value: LISTENER_INTERNAL://kafka-service:9092,LISTENER_EXTERNAL://localhost:9093
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: LISTENER_INTERNAL://kafka-service:9092,LISTENER_EXTERNAL://localhost:9093
+            - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+              value: LISTENER_INTERNAL:PLAINTEXT,LISTENER_EXTERNAL:PLAINTEXT
+            - name: KAFKA_INTER_BROKER_LISTENER_NAME
+              value: LISTENER_INTERNAL
+          image: wurstmeister/kafka
+          imagePullPolicy: IfNotPresent
+          name: kafka-service
+          ports:
+            - containerPort: 9092
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-service-deployment
+  labels:
+    app: admin-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-service
+  template:
+    metadata:
+      labels:
+        app: admin-service
+    spec:
+      initContainers:
+        - name: wait-for-kafka
+          image: busybox
+          command: ['sh', '-c', 'until nc -z kafka-service 9092; do echo waiting for kafka...; sleep 2; done']
+      containers:
+        - name: admin-service
+          image: team07registry.azurecr.io/admin-service:prod
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service-deployment
+  labels:
+    app: auth-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      initContainers:
+        - name: wait-for-kafka
+          image: busybox
+          command: ['sh', '-c', 'until nc -z kafka-service 9092; do echo waiting for kafka...; sleep 2; done']
+      containers:
+        - name: auth-service
+          image: team07registry.azurecr.io/auth-service:prod
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: diary-service-deployment
+  labels:
+    app: diary-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: diary-service
+  template:
+    metadata:
+      labels:
+        app: diary-service
+    spec:
+      initContainers:
+        - name: wait-for-kafka
+          image: busybox
+          command: ['sh', '-c', 'until nc -z kafka-service 9092; do echo waiting for kafka...; sleep 2; done']
+      containers:
+        - name: diary-service
+          image: team07registry.azurecr.io/diary-service:prod
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guide-service-deployment
+  labels:
+    app: guide-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: guide-service
+  template:
+    metadata:
+      labels:
+        app: guide-service
+    spec:
+      initContainers:
+        - name: wait-for-kafka
+          image: busybox
+          command: ['sh', '-c', 'until nc -z kafka-service 9092; do echo waiting for kafka...; sleep 2; done']
+      containers:
+        - name: guide-service
+          image: team07registry.azurecr.io/guide-service:prod
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pet-service-deployment
+  labels:
+    app: pet-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pet-service
+  template:
+    metadata:
+      labels:
+        app: pet-service
+    spec:
+      initContainers:
+        - name: wait-for-kafka
+          image: busybox
+          command: ['sh', '-c', 'until nc -z kafka-service 9092; do echo waiting for kafka...; sleep 2; done']
+      containers:
+        - name: pet-service
+          image: team07registry.azurecr.io/pet-service:prod
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-service-deployment
+  labels:
+    app: gateway-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-service
+  template:
+    metadata:
+      labels:
+        app: gateway-service
+    spec:
+      containers:
+        - name: gateway-service
+          image: team07registry.azurecr.io/gateway-service:prod
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: kafka:9092
