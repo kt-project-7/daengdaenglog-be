@@ -40,25 +40,16 @@ public class DiaryService {
      * 펫 다이어리 리스트 조회
      */
     public PetDiaryListResponse getPetDiaryList(
-            Long userId, int size
+            Long userId
     ) {
         List<PetDiaryResponse> list = petClient.getPetIdList(userId).stream()
                 .map(petInfo -> {
-                    List<DiarySimpleResponse> diaryList = diaryRepository.getDiaryList(petInfo.petId(), 0, size);
+                    List<DiarySimpleResponse> diaryList = diaryRepository.getDiaryList(petInfo.petId());
                     return PetDiaryResponse.of(petInfo, diaryList);
                 })
                 .toList();
 
         return PetDiaryListResponse.from(list);
-    }
-
-    /**
-     * 펫 다이어리 페이징 조회
-     */
-    public DiarySimpleListResponse getDiaryListPaging(
-            Long petId, int page, int size
-    ) {
-        return DiarySimpleListResponse.from(diaryRepository.getDiaryList(petId, page, size));
     }
 
     /**

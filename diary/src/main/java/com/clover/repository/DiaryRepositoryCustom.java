@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface DiaryRepositoryCustom {
-    List<DiarySimpleResponse> getDiaryList(Long userId, int page, int size);
+    List<DiarySimpleResponse> getDiaryList(Long userId);
     Optional<Long> findTodayDiaryId(Long petId);
 }
