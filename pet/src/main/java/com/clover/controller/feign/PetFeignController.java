@@ -25,6 +25,12 @@ public class PetFeignController {
         return feignPetService.getPetIdList(userId);
     }
 
+    @Operation(summary = "펫 정보 조회", description = "프론트 사용 X - 백엔드 통신")
+    @GetMapping("/pets/{petId}/info")
+    public FeignPetInfoResponse getPetInfo(@PathVariable Long petId) {
+        return feignPetService.getPetInfo(petId);
+    }
+
     @Operation(summary = "펫 주인 검증", description = "프론트 사용 X - 백엔드 통신")
     @GetMapping("/pets/{petId}")
     public boolean validatePetId(@PathVariable Long petId, @RequestParam Long userId) {

@@ -5,10 +5,12 @@ import com.clover.repository.PetRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Slf4j
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class FeignPetService {
@@ -24,6 +26,12 @@ public class FeignPetService {
         petInfoList.forEach(petInfo -> log.info("petInfo: {}", petInfo));
 
         return petInfoList;
+    }
+
+    public FeignPetInfoResponse getPetInfo(Long petId) {
+        return petRepository.findById(petId)
+                .map(FeignPetInfoResponse::from)
+                .orElseThrow(() -> new RuntimeException("펫 정보를 찾을 수 없습니다."));
     }
 
     public boolean validatePetId(Long petId, Long userId) {

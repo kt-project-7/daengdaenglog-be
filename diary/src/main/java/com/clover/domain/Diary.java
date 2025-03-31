@@ -40,20 +40,24 @@ public class Diary extends BaseTimeEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "memory_uri")
+    @Column(name = "memory_uri", length = 1024)
     private String memoryUri;
+
+    @Column(name = "generated_image_uri", length = 1024)
+    private String generatedImageUri;
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ScheduleTime> scheduleTimeList = new ArrayList<>();
 
     @Builder
-    public Diary(Long petId, EmotionType emotionType, WeatherType weatherType, String title, String content, String memoryUri, List<ScheduleTime> scheduleTimeList) {
+    public Diary(Long petId, EmotionType emotionType, WeatherType weatherType, String title, String content, String memoryUri, String generatedImageUri, List<ScheduleTime> scheduleTimeList) {
         this.petId = petId;
         this.emotionType = emotionType;
         this.weatherType = weatherType;
         this.title = title;
         this.content = content;
         this.memoryUri = memoryUri;
+        this.generatedImageUri = generatedImageUri;
         this.scheduleTimeList = scheduleTimeList;
 
         if (scheduleTimeList != null) {
@@ -74,5 +78,9 @@ public class Diary extends BaseTimeEntity {
         }
 
         this.scheduleTimeList.clear();
+    }
+
+    public void updateGeneratedImageUri(String generatedImageUri) {
+        this.generatedImageUri = generatedImageUri;
     }
 }
