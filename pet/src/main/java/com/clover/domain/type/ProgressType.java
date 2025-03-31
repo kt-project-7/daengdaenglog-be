@@ -1,7 +1,7 @@
 package com.clover.domain.type;
 
 public enum ProgressType {
-    APPROVE,
+    APPROVED,
     PENDING,
     REJECTED,
 }
