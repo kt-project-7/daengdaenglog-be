@@ -112,6 +112,7 @@ public class DiaryService {
     /**
      * ai 이미지 생성
      */
+    @Transactional
     public String generateAiImage(
             Long userId, Long diaryId
     ) {
@@ -126,7 +127,10 @@ public class DiaryService {
                 .map(FeignImageGenScheduleRequest::from)
                 .toList();
 
-        return aiClient.generateImage(FeignImageGenerateRequest.of(petInfo, diary, scheduleList));
+        String imageUrl = aiClient.generateImage(FeignImageGenerateRequest.of(petInfo, diary, scheduleList));
+        diary.updateGeneratedImageUri(imageUrl);
+
+        return imageUrl;
     }
 
     /**
