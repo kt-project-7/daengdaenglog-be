@@ -8,3 +8,5 @@ include 'letter'
 include 'guide'
 include 'memory'
 include 'gateway'
+include 'ai'
+

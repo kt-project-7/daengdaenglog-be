@@ -73,6 +73,10 @@ spec:
       labels:
         app: kafka-service
     spec:
+      initContainers:
+        - name: wait-for-zookeeper
+          image: busybox
+          command: [ 'sh', '-c', 'until nc -z zookeeper-service 2181; do echo waiting for kafka...; sleep 2; done' ]
       containers:
         - env:
             - name: KAFKA_BROKER_ID
@@ -133,8 +137,12 @@ spec:
               value: clover
             - name: POSTGRES_PASSWORD
               value: cloverpass
-            - name: POSTGRES_DB
-              value: cloverdb
+          command: [ "bash", "-c", "docker-entrypoint.sh postgres & sleep 5 && 
+          psql -U clover -d postgres -c 'CREATE DATABASE clover_admin_db;' && 
+          psql -U clover -d postgres -c 'CREATE DATABASE clover_auth_db;' && 
+          psql -U clover -d postgres -c 'CREATE DATABASE clover_diary_db;' && 
+          psql -U clover -d postgres -c 'CREATE DATABASE clover_guide_db;' && 
+          psql -U clover -d postgres -c 'CREATE DATABASE clover_pet_db;' && wait" ]
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgres-storage

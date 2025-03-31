@@ -6,7 +6,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static com.clover.domain.QDiary.diary;
 
@@ -31,5 +34,19 @@ public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
                 .offset((long) page * size)
                 .limit(size)
                 .fetch();
+    }
+
+    @Override
+    public Optional<Long> findTodayDiaryId(Long petId) {
+        LocalDateTime todayStart = LocalDate.now().atStartOfDay();
+        LocalDateTime todayEnd = todayStart.plusDays(1);
+
+        return Optional.ofNullable(
+                jpaQueryFactory
+                        .select(diary.id)
+                        .from(diary)
+                        .where(diary.petId.eq(petId), diary.createdDate.between(todayStart, todayEnd))
+                        .orderBy(diary.id.asc())
+                        .fetchFirst());
     }
 }

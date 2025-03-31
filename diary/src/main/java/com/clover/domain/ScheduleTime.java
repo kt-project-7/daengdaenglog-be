@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Table(name = "schedule_time")
 @Getter
@@ -29,16 +29,20 @@ public class ScheduleTime {
     private ScheduleType scheduleType;
 
     @Column(name = "start_time", nullable = false)
-    private LocalDateTime startTime;
+    private LocalTime startTime;
 
     @Column(name = "end_time", nullable = false)
-    private LocalDateTime endTime;
+    private LocalTime endTime;
 
     @Builder
-    public ScheduleTime(Diary diary, ScheduleType scheduleType, LocalDateTime startTime, LocalDateTime endTime) {
+    public ScheduleTime(Diary diary, ScheduleType scheduleType, LocalTime startTime, LocalTime endTime) {
         this.diary = diary;
         this.scheduleType = scheduleType;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    public void updateDiary(Diary diary) {
+        this.diary = diary;
     }
 }

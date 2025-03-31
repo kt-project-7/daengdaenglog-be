@@ -41,7 +41,7 @@ public class AuthController {
                 .body(ResponseTemplate.from(selfSignInResponse));
     }
 
-    @Operation(summary = "토큰 유효성 검사", description = "토큰 유효성 검사")
+    @Operation(summary = "토큰 유효성 검사", description = "프론트 사용 X - 백엔드 통신")
     @GetMapping("/validate-token")
     public AuthResponse validateToken(@RequestHeader("Authorization") String token) {
         AuthResponse userId = authService.validateToken(token);
@@ -50,4 +50,6 @@ public class AuthController {
 
         return userId;
     }
+
+    //TODO: 유저 정보 조회 api - 유저 개인 정보 조회 요청 시 사용
 }
