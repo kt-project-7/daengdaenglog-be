@@ -100,7 +100,19 @@ public class DiaryController {
                 .body(ResponseTemplate.EMPTY_RESPONSE);
     }
 
-    //TODO: 추억 그림 생성 api - ai를 이용한 추억 그림 생성 및 memory 테이블에 추가
+    @Operation(summary = "추억 그림 생성", description = "추억 그림 생성<br> AI를 이용한 추억 그림 생성")
+    @GetMapping("/{diaryId}/image")
+    public ResponseEntity<ResponseTemplate<?>> generateImage(
+            HttpServletRequest request,
+            @PathVariable Long diaryId
+    ) {
+        Long userId = Long.parseLong(request.getHeader("User-Id"));
+        String imageUrl = diaryService.generateAiImage(userId, diaryId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.from(imageUrl));
+    }
 
     @Operation(summary = "펫 다이어리 생성", description = "펫 다이어리 생성<br>" +
             "EmotionType: HAPPY, SAD, ANGRY, SURPRISED, HUNGRY, SICK, LOVE, SLEEPY<br>" +

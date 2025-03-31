@@ -1,5 +1,6 @@
 package com.clover.service;
 
+import com.clover.dto.request.feign.FeignImageGenerateRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.messages.SystemMessage;
@@ -24,10 +25,10 @@ public class AiService {
         날짜별 관찰 내용 중 특이사항만 종합적으로 요약해주고, 예상되는 진료 원인도 정리해줘.
         """;
 
-    public String generateImage(String prompt) {
-        String instruction = "귀여운 강아지를 생성해줘. 이떄 지브리 풍으로 만들어주라";
-
-        ImagePrompt imagePrompt = new ImagePrompt(instruction);
+    public String generateImage(
+            FeignImageGenerateRequest input
+    ) {
+        ImagePrompt imagePrompt = new ImagePrompt(input.toPrompt());
         ImageResponse response = imageModel.call(imagePrompt);
 
         if (!response.getResults().isEmpty()) {
@@ -41,7 +42,9 @@ public class AiService {
         }
     }
 
-    public String getChatResponse(String userInput) {
+    public String generateText(
+            String userInput
+    ) {
         SystemMessage systemMessage = new SystemMessage(SYSTEM_PROMPT);
         UserMessage userMessage = new UserMessage(userInput);
 

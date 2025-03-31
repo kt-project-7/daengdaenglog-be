@@ -7,4 +7,5 @@ public record FeignPetInfoResponse(
         String pbti,
         String petType
 ) {
+
 }
