@@ -7,6 +7,8 @@ import com.clover.dto.request.UpdateDiaryRequest;
 import com.clover.dto.request.feign.FeignImageGenScheduleRequest;
 import com.clover.dto.request.feign.FeignImageGenerateRequest;
 import com.clover.dto.response.*;
+import com.clover.dto.response.feign.FeignPetDiaryDetailListResponse;
+import com.clover.dto.response.feign.FeignPetDiaryDetailResponse;
 import com.clover.dto.response.feign.FeignPetInfoResponse;
 import com.clover.exception.DiaryNotFoundException;
 import com.clover.exception.PetIdNotMatchException;
@@ -71,6 +73,19 @@ public class DiaryService {
         validateIsPetOwner(userId, diary.getPetId());
 
         return DiaryDetailResponse.from(diary);
+    }
+
+    /**
+     * 펫 다이어리 목록 상세 조회
+     */
+    public FeignPetDiaryDetailListResponse getDiaryDetailList(
+            Long petId
+    ) {
+        List<FeignPetDiaryDetailResponse> list = diaryRepository.findAllByPetId(petId).stream()
+                .map(FeignPetDiaryDetailResponse::from)
+                .toList();
+
+        return FeignPetDiaryDetailListResponse.from(list);
     }
 
     /**

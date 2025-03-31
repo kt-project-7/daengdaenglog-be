@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,19 @@ public class PetController {
 
     private final PetService petService;
 
-    //TODO: pbti 생성 api - 펫 유형정보 분석 요청 시 사용 - 사람 MBTI와 동일하게
+    @Operation(summary = "펫 pbti 분석", description = "펫 유형정보 분석 요청 시 사용")
+    @GetMapping("/pbti/{petId}")
+    public ResponseEntity<ResponseTemplate<?>> getPetPbti(
+            HttpServletRequest request,
+            @PathVariable Long petId
+    ) {
+        Long userId = Long.parseLong(request.getHeader("User-Id"));
+        String response = petService.analyzePetPbti(userId, petId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.from(response));
+    }
 
     @Operation(summary = "펫 목록 조회", description = "펫 목록 조회(펫 리스트만 조회)")
     @GetMapping

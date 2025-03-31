@@ -50,6 +50,4 @@ public class AuthController {
 
         return userId;
     }
-
-    //TODO: 유저 정보 조회 api - 유저 개인 정보 조회 요청 시 사용
 }

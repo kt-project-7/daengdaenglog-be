@@ -1,6 +1,7 @@
 package com.clover.controller.feign;
 
 import com.clover.dto.request.feign.FeignImageGenerateRequest;
+import com.clover.dto.request.feign.FeignPetDiaryDetailListResponse;
 import com.clover.service.AiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,5 +32,13 @@ public class AiFeignController {
             @RequestBody String prompt
     ) {
         return aiService.generateText(prompt);
+    }
+
+    @Operation(summary = "PBTI 분석", description = "프론트 사용 X - 백엔드 통신")
+    @PostMapping("/pbti")
+    public String generatePbti(
+            @RequestBody FeignPetDiaryDetailListResponse requestList
+    ) {
+        return aiService.generatePbti(requestList.diaryList());
     }
 }
