@@ -17,6 +17,9 @@ dependencies {
 
     //spring ai
     implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
+
+    //azure blob
+    implementation 'com.azure:azure-storage-blob:12.21.0'
 }
 
 tasks.register('copyConfig', Copy) {
