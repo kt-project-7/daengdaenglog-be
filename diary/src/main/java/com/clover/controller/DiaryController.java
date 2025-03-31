@@ -7,7 +7,6 @@ import com.clover.dto.response.DiaryDetailResponse;
 import com.clover.dto.response.DiarySimpleListResponse;
 import com.clover.dto.response.PetDiaryListResponse;
 import com.clover.dto.response.TodayDiaryResponse;
-import com.clover.service.AiService;
 import com.clover.service.DiaryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class DiaryController {
 
     private final DiaryService diaryService;
-    private final AiService aiService;
 
     @Operation(summary = "펫 다이어리 리스트 조회", description = "처음 펫 다이어리 리스트 조회")
     @GetMapping
@@ -103,10 +101,6 @@ public class DiaryController {
     }
 
     //TODO: 추억 그림 생성 api - ai를 이용한 추억 그림 생성 및 memory 테이블에 추가
-    @GetMapping("/test")
-    public String test() {
-        return aiService.generateImage("asd");
-    }
 
     @Operation(summary = "펫 다이어리 생성", description = "펫 다이어리 생성<br>" +
             "EmotionType: HAPPY, SAD, ANGRY, SURPRISED, HUNGRY, SICK, LOVE, SLEEPY<br>" +

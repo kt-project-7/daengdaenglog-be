@@ -16,8 +16,13 @@ public class AiController {
     private final AiService aiService;
 
     //TODO: 추억 그림 생성 api - ai를 이용한 추억 그림 생성 및 memory 테이블에 추가
-    @GetMapping("/test")
+    @GetMapping("/image-test")
     public String test() {
         return aiService.generateImage("asd");
+    }
+
+    @GetMapping("/chat-test")
+    public String chatTest(@RequestParam String userInput) {
+        return aiService.getChatResponse(userInput);
     }
 }
