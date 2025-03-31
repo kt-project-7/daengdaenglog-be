@@ -49,7 +49,6 @@ subprojects { // 모든 하위 모듈들에 이 설정을 적용합니다.
 		}
 	}
 
-
 	repositories {
 		mavenCentral()
 	}
@@ -91,9 +90,6 @@ subprojects { // 모든 하위 모듈들에 이 설정을 적용합니다.
 
 		//azure blob storage
 		implementation 'com.azure.spring:spring-cloud-azure-starter-storage'
-
-		//spring ai
-//		implementation 'org.springframework.ai:spring-ai-azure-openai-spring-boot-starter'
 	}
 
 	test {
