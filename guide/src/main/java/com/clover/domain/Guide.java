@@ -20,12 +20,32 @@ public class Guide extends BaseTimeEntity {
     @Column(name = "pet_id", nullable = false)
     private Long petId;
 
-    @Column(name = "content", nullable = false)
-    private String content;
+    @Column(name = "general_info", nullable = false)
+    private String generalInfo;
+
+    @Column(name = "routine_info", nullable = false)
+    private String routineInfo;
+
+    @Column(name = "feeding_info", nullable = false)
+    private String feedingInfo;
+
+    @Column(name = "health_info", nullable = false)
+    private String healthInfo;
+
+    @Column(name = "special_info", nullable = false)
+    private String specialInfo;
+
+    @Column(name = "emergency_info", nullable = false)
+    private String emergencyInfo;
 
     @Builder
-    public Guide(Long petId, String content) {
+    public Guide(Long petId, String generalInfo, String routineInfo, String feedingInfo, String healthInfo, String specialInfo, String emergencyInfo) {
         this.petId = petId;
-        this.content = content;
+        this.generalInfo = generalInfo;
+        this.routineInfo = routineInfo;
+        this.feedingInfo = feedingInfo;
+        this.healthInfo = healthInfo;
+        this.specialInfo = specialInfo;
+        this.emergencyInfo = emergencyInfo;
     }
 }
