@@ -21,28 +21,28 @@ public class PetInitOutbox {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "image_uri")
-    private String imageUri;
-
-    @Column(name = "pbti")
-    private String pbti;
-
     @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "pet_type", nullable = false)
     private String petType;
 
+    @Column(name = "event_id", nullable = false)
+    private String eventId;
+
     @Column(name = "status", nullable = false)
     private Status status;
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted;
+
     @Builder
-    public PetInitOutbox(Long userId, String imageUri, String pbti, String name, String petType, Status status) {
+    public PetInitOutbox(Long userId, String name, String petType, String eventId, Status status, boolean isDeleted) {
         this.userId = userId;
-        this.imageUri = imageUri;
-        this.pbti = pbti;
         this.name = name;
         this.petType = petType;
+        this.eventId = eventId;
         this.status = status;
+        this.isDeleted = isDeleted;
     }
 }
