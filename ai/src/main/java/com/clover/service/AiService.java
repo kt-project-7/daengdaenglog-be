@@ -32,7 +32,7 @@ public class AiService {
 
         if (!response.getResults().isEmpty()) {
             // 이미지 생성 성공
-            String imageUrl =  response.getResults().get(0).getOutput().getUrl();
+            String imageUrl =  response.getResults().getFirst().getOutput().getUrl();
             log.info("Generated image URL: {}", imageUrl);
 
             return imageUrl;
