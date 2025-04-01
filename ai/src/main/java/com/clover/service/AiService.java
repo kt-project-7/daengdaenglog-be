@@ -97,7 +97,7 @@ public class AiService {
     public void generateSummary(
             SummaryRequest request
     ) {
-        SystemMessage systemMessage = new SystemMessage(SYSTEM_PROMPT_SUMMARY);
+        SystemMessage systemMessage = new SystemMessage(PromptType.SUMMARY.getPrompt());
         UserMessage userMessage = new UserMessage(formatDiaryList(request));
 
         String response = chatModel.call(systemMessage, userMessage);
