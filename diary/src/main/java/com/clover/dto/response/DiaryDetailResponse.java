@@ -18,6 +18,7 @@ public record DiaryDetailResponse(
         WeatherType weatherType,
         LocalDate createdDate,
         String memoryUri,
+        String generatedImageUri,
         List<DiaryDetailScheduleResponse> scheduleList
 ) {
 
@@ -31,6 +32,7 @@ public record DiaryDetailResponse(
                 .weatherType(diary.getWeatherType())
                 .createdDate(diary.getCreatedDate().toLocalDate())
                 .memoryUri(diary.getMemoryUri())
+                .generatedImageUri(diary.getGeneratedImageUri())
                 .scheduleList(diary.getScheduleTimeList().stream()
                         .map(DiaryDetailScheduleResponse::from)
                         .toList())
