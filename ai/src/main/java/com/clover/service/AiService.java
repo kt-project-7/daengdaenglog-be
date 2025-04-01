@@ -2,6 +2,7 @@ package com.clover.service;
 
 import com.clover.dto.request.feign.FeignImageGenerateRequest;
 import com.clover.dto.request.feign.FeignPetDiaryDetailResponse;
+import com.clover.dto.request.feign.FeignTextGenerateRequest;
 import com.clover.enums.PromptType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,10 +42,10 @@ public class AiService {
     }
 
     public String generateText(
-            String userInput
+            FeignTextGenerateRequest prompt
     ) {
-        SystemMessage systemMessage = new SystemMessage(PromptType.HOSPITAL.getPrompt());
-        UserMessage userMessage = new UserMessage(userInput);
+        SystemMessage systemMessage = new SystemMessage(prompt.promptType().getPrompt());
+        UserMessage userMessage = new UserMessage(prompt.userInput());
 
         String response = chatModel.call(systemMessage, userMessage);
 
