@@ -8,10 +8,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SQLDelete(sql = "UPDATE diary SET is_deleted = true WHERE id = ?")
+@SQLRestriction("is_deleted IS FALSE")
 @Table(name = "diary")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -48,6 +52,9 @@ public class Diary extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ScheduleTime> scheduleTimeList = new ArrayList<>();
+
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted = false;
 
     @Builder
     public Diary(Long petId, EmotionType emotionType, WeatherType weatherType, String title, String content, String memoryUri, String generatedImageUri, List<ScheduleTime> scheduleTimeList) {

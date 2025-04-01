@@ -15,13 +15,14 @@ public record CreateDiaryRequest(
         List<DiaryScheduleRequest> diaryScheduleRequestList
 ) {
 
-    public Diary toEntity() {
+    public Diary toEntity(String memoryImageUrl) {
         return Diary.builder()
                 .petId(this.petId())
                 .emotionType(this.emotionType())
                 .weatherType(this.weatherType())
                 .title(this.title())
                 .content(this.content())
+                .memoryUri(memoryImageUrl)
                 .scheduleTimeList(this.diaryScheduleRequestList().stream()
                         .map(DiaryScheduleRequest::toEntity)
                         .toList())

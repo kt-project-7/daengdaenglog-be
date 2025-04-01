@@ -115,4 +115,18 @@ public class DiaryController {
                 .status(HttpStatus.OK)
                 .body(ResponseTemplate.EMPTY_RESPONSE);
     }
+
+    @Operation(summary = "펫 다이어리 삭제", description = "자기 자신의 펫 다이어리만 삭제 가능")
+    @DeleteMapping("/{diaryId}")
+    public ResponseEntity<ResponseTemplate<?>> deleteDiary(
+            HttpServletRequest request,
+            @PathVariable Long diaryId
+    ) {
+        Long userId = Long.parseLong(request.getHeader("User-Id"));
+        diaryService.deleteDiary(userId, diaryId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.EMPTY_RESPONSE);
+    }
 }
