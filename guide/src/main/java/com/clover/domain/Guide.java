@@ -1,5 +1,6 @@
 package com.clover.domain;
 
+import com.clover.domain.type.Status;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -20,32 +21,21 @@ public class Guide extends BaseTimeEntity {
     @Column(name = "pet_id", nullable = false)
     private Long petId;
 
-    @Column(name = "general_info", nullable = false)
-    private String generalInfo;
+    @Column(name = "content")
+    private String content;
 
-    @Column(name = "routine_info", nullable = false)
-    private String routineInfo;
-
-    @Column(name = "feeding_info", nullable = false)
-    private String feedingInfo;
-
-    @Column(name = "health_info", nullable = false)
-    private String healthInfo;
-
-    @Column(name = "special_info", nullable = false)
-    private String specialInfo;
-
-    @Column(name = "emergency_info", nullable = false)
-    private String emergencyInfo;
+    @Column(name = "statud", nullable = false)
+    private Status status;
 
     @Builder
-    public Guide(Long petId, String generalInfo, String routineInfo, String feedingInfo, String healthInfo, String specialInfo, String emergencyInfo) {
+    public Guide(Long petId, String content, Status status) {
         this.petId = petId;
-        this.generalInfo = generalInfo;
-        this.routineInfo = routineInfo;
-        this.feedingInfo = feedingInfo;
-        this.healthInfo = healthInfo;
-        this.specialInfo = specialInfo;
-        this.emergencyInfo = emergencyInfo;
+        this.content = content;
+        this.status = status;
+    }
+
+    public void updateGuide(String content) {
+        this.content = content;
+        this.status = Status.DONE;
     }
 }

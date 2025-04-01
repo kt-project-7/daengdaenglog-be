@@ -1,18 +1,20 @@
 package com.clover.service.handler;
 
+import com.clover.dto.request.GuideInitRequest;
 import com.clover.repository.GuideInitOutboxRepository;
 import com.clover.service.KafkaProducer;
 import com.clover.service.event.GuideInitEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 @Component
 public class GuideInitEventHandler {
 
@@ -22,6 +24,7 @@ public class GuideInitEventHandler {
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void handleCompletion(GuideInitEvent event) {
         log.info("guide outbox save: {}", event);
+
         guideInitOutboxRepository.save(event.toOutbox());
     }
 
@@ -29,8 +32,7 @@ public class GuideInitEventHandler {
     public void handle(GuideInitEvent event) {
         log.info("guide outbox send: {}", event);
 
-        //TODO: 추상화된 데이터를 보낼 수 있게 변경
-        kafkaProducer.send("init-guide", event);
+        kafkaProducer.send("init-guide", new GuideInitRequest(event.petId(), event.guideId()));
         guideInitOutboxRepository.deleteById(event.guideId());
     }
 }
