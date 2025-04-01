@@ -17,6 +17,7 @@ import com.clover.repository.DiaryRepository;
 import com.clover.repository.ScheduleTimeRepository;
 import com.clover.service.client.AiClient;
 import com.clover.service.client.PetClient;
+import com.clover.util.BlobUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,30 +36,22 @@ public class DiaryService {
     private final ScheduleTimeRepository scheduleTimeRepository;
     private final PetClient petClient;
     private final AiClient aiClient;
+    private final BlobUtils blobUtils;
 
     /**
      * 펫 다이어리 리스트 조회
      */
     public PetDiaryListResponse getPetDiaryList(
-            Long userId, int size
+            Long userId
     ) {
         List<PetDiaryResponse> list = petClient.getPetIdList(userId).stream()
                 .map(petInfo -> {
-                    List<DiarySimpleResponse> diaryList = diaryRepository.getDiaryList(petInfo.petId(), 0, size);
+                    List<DiarySimpleResponse> diaryList = diaryRepository.getDiaryList(petInfo.petId());
                     return PetDiaryResponse.of(petInfo, diaryList);
                 })
                 .toList();
 
         return PetDiaryListResponse.from(list);
-    }
-
-    /**
-     * 펫 다이어리 페이징 조회
-     */
-    public DiarySimpleListResponse getDiaryListPaging(
-            Long petId, int page, int size
-    ) {
-        return DiarySimpleListResponse.from(diaryRepository.getDiaryList(petId, page, size));
     }
 
     /**
@@ -113,8 +106,10 @@ public class DiaryService {
 
         validateIsPetOwner(userId, diary.getPetId());
 
-        //TODO: file이 있으면 이미지 저장 로직 추가
-        diary.updateDiary(request, null);
+        String imageUri = file == null ? "" : blobUtils.uploadFile(file, "diary");
+        diary.updateDiary(request, imageUri);
+
+        log.info("imageUri: {}", imageUri);
 
         request.diaryScheduleRequestList().forEach(schedule -> {
             ScheduleTime entity = schedule.toEntity();
@@ -122,6 +117,21 @@ public class DiaryService {
 
             scheduleTimeRepository.save(entity);
         });
+    }
+
+    /**
+     * 펫 다이어리 삭제
+     */
+    @Transactional
+    public void deleteDiary(
+            Long userId, Long diaryId
+    ) {
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new DiaryNotFoundException(DiaryErrorCode.DIARY_NOT_FOUND));
+
+        validateIsPetOwner(userId, diary.getPetId());
+
+        diaryRepository.deleteById(diaryId);
     }
 
     /**
@@ -157,9 +167,9 @@ public class DiaryService {
     ) {
         validateIsPetOwner(userId, request.petId());
 
-        //TODO: 이미지 저장 로직 추가
+        String imageUri = file == null ? "" : blobUtils.uploadFile(file, "diary");
 
-        diaryRepository.save(request.toEntity());
+        diaryRepository.save(request.toEntity(imageUri));
     }
 
     private void validateIsPetOwner(

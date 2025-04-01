@@ -1,6 +1,7 @@
 package com.clover.controller;
 
 import com.clover.dto.ResponseTemplate;
+import com.clover.dto.response.PetInsuranceListResponse;
 import com.clover.dto.response.PetSimpleInfoListResponse;
 import com.clover.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,6 +46,20 @@ public class PetController {
     ) {
         Long userId = Long.parseLong(request.getHeader("User-Id"));
         PetSimpleInfoListResponse response = petService.getPetList(userId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.from(response));
+    }
+
+    @Operation(summary = "펫 보험 청구 내역 조회", description = "펫 보험 청구 내역 조회")
+    @GetMapping("/insurance/{petId}")
+    public ResponseEntity<ResponseTemplate<?>> getPetInsurance(
+            HttpServletRequest request,
+            @PathVariable Long petId
+    ) {
+        Long userId = Long.parseLong(request.getHeader("User-Id"));
+        PetInsuranceListResponse response = petService.getPetInsurance(userId, petId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

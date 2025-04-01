@@ -4,7 +4,6 @@ import com.clover.dto.ResponseTemplate;
 import com.clover.dto.request.CreateDiaryRequest;
 import com.clover.dto.request.UpdateDiaryRequest;
 import com.clover.dto.response.DiaryDetailResponse;
-import com.clover.dto.response.DiarySimpleListResponse;
 import com.clover.dto.response.PetDiaryListResponse;
 import com.clover.dto.response.TodayDiaryResponse;
 import com.clover.service.DiaryService;
@@ -31,29 +30,14 @@ public class DiaryController {
     @Operation(summary = "펫 다이어리 리스트 조회", description = "처음 펫 다이어리 리스트 조회")
     @GetMapping
     public ResponseEntity<ResponseTemplate<?>> getPetDiaryList(
-            HttpServletRequest request,
-            @RequestParam int size
+            HttpServletRequest request
     ) {
         Long userId = Long.parseLong(request.getHeader("User-Id"));
-        PetDiaryListResponse petDiaryList = diaryService.getPetDiaryList(userId, size);
+        PetDiaryListResponse petDiaryList = diaryService.getPetDiaryList(userId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ResponseTemplate.from(petDiaryList));
-    }
-
-    @Operation(summary = "펫 다이어리 페이징 조회", description = "각각의 펫 다이어리 페이징 조회")
-    @GetMapping("/pets/{petId}")
-    public ResponseEntity<ResponseTemplate<?>> getPetDiaryListPaging(
-            @PathVariable Long petId,
-            @RequestParam int page,
-            @RequestParam int size
-    ) {
-        DiarySimpleListResponse diaryListPaging = diaryService.getDiaryListPaging(petId, page, size);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(ResponseTemplate.from(diaryListPaging));
     }
 
     @Operation(summary = "펫 다이어리 상세 조회", description = "memoryId가 0이면 관련 이미지 없는 것, 자기 자신의 펫 다이어리만 조회 가능")
@@ -126,6 +110,20 @@ public class DiaryController {
     ) {
         Long userId = Long.parseLong(request.getHeader("User-Id"));
         diaryService.createDiary(createDiaryRequest, file, userId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.EMPTY_RESPONSE);
+    }
+
+    @Operation(summary = "펫 다이어리 삭제", description = "자기 자신의 펫 다이어리만 삭제 가능")
+    @DeleteMapping("/{diaryId}")
+    public ResponseEntity<ResponseTemplate<?>> deleteDiary(
+            HttpServletRequest request,
+            @PathVariable Long diaryId
+    ) {
+        Long userId = Long.parseLong(request.getHeader("User-Id"));
+        diaryService.deleteDiary(userId, diaryId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

@@ -20,7 +20,7 @@ public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<DiarySimpleResponse> getDiaryList(Long petId, int page, int size) {
+    public List<DiarySimpleResponse> getDiaryList(Long petId) {
         return jpaQueryFactory
                 .select(Projections.constructor(DiarySimpleResponse.class,
                         diary.id,
@@ -31,8 +31,6 @@ public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
                 .from(diary)
                 .where(diary.petId.eq(petId))
                 .orderBy(diary.createdDate.desc())
-                .offset((long) page * size)
-                .limit(size)
                 .fetch();
     }
 
