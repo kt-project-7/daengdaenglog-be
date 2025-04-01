@@ -1,7 +1,6 @@
 package com.clover.service;
 
 import com.clover.dto.response.SummaryResponse;
-import com.clover.repository.SummaryDataRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -13,12 +12,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaConsumer {
 
-    private final SummaryDataRepository summaryDataRepository;
+    private final SummaryService summaryService;
 
     @KafkaListener(topics = "summary-response", groupId = "consumer-group")
     public void consumeMessage(@Payload SummaryResponse message) {
         log.info("Consumed message: {}", message);
 
-        summaryDataRepository.save(message.toEntity());
+        summaryService.saveSummary(message);
     }
 }
