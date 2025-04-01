@@ -12,9 +12,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping
 @RestController
 public class AdminController {
-
-    //TODO: 유저 생성 api - 유저 생성 요청 시 사용 - 비동기로 auth-service에 유저 생성 요청
-
-
-    //TODO: 펫 정보 생성 api - 펫 정보 생성 요청 시 사용 - 비동기로 pet-service에 펫 정보 생성 요청
 }
