@@ -263,12 +263,9 @@ spec:
         - name: wait-for-kafka
           image: busybox
           command: ['sh', '-c', 'until nc -z kafka-service 9092; do echo waiting for kafka...; sleep 2; done']
-        - name: wait-for-postgres
-          image: busybox
-          command: ['sh', '-c', 'until nc -z postgres 5432; do echo waiting for postgres...; sleep 2; done']
       containers:
         - name: ai-service
-          image: leedy3838/ai-service:dev
+          image: team07registry.azurecr.io/ai-service:prod
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
