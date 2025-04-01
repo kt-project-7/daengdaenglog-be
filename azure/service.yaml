@@ -110,3 +110,14 @@ spec:
       targetPort: 8080
   selector:
     app: gateway-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-service
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: ai-service
