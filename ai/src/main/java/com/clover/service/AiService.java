@@ -2,6 +2,7 @@ package com.clover.service;
 
 import com.clover.dto.request.feign.FeignImageGenerateRequest;
 import com.clover.dto.request.feign.FeignPetDiaryDetailResponse;
+import com.clover.enums.PromptType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.messages.SystemMessage;
@@ -12,7 +13,6 @@ import org.springframework.ai.image.ImagePrompt;
 import org.springframework.ai.image.ImageResponse;
 import org.springframework.stereotype.Service;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
@@ -22,18 +22,6 @@ public class AiService {
 
     private final ImageModel imageModel;
     private final ChatModel chatModel;
-
-    private static final String SYSTEM_PROMPT = """
-        나는 강아지를 키우는 반려인으로, 강아지에 대한 정보와 일지들을 제공할 거야.
-        제공된 일지들을 요약하고, 강아지의 건강에 대한 중요한 정보를 추출해서 전달해줘.
-        날짜별 관찰 내용 중 특이사항만 종합적으로 요약해주고, 예상되는 진료 원인도 정리해줘.
-        """;
-
-    private static final String SYSTEM_PROMPT_PBTI = """
-        나는 강아지를 키우는 반려인으로, 강아지에 대한 정보와 일지들을 제공할 거야.
-        제공된 일지들을 분석하여 사람의 MBTI와 같이 강아지의 PBTI를 분석해줘.
-        응답은 ISTJ 이런 식으로 PBTI로만 해줘.
-        """;
 
     public String generateImage(
             FeignImageGenerateRequest input
@@ -55,7 +43,7 @@ public class AiService {
     public String generateText(
             String userInput
     ) {
-        SystemMessage systemMessage = new SystemMessage(SYSTEM_PROMPT);
+        SystemMessage systemMessage = new SystemMessage(PromptType.HOSPITAL.getPrompt());
         UserMessage userMessage = new UserMessage(userInput);
 
         String response = chatModel.call(systemMessage, userMessage);
@@ -68,7 +56,7 @@ public class AiService {
     public String generatePbti(
             List<FeignPetDiaryDetailResponse> requestList
     ) {
-        SystemMessage systemMessage = new SystemMessage(SYSTEM_PROMPT_PBTI);
+        SystemMessage systemMessage = new SystemMessage(PromptType.PBTI.getPrompt());
         UserMessage userMessage = new UserMessage(formatDiaryList(requestList));
 
         String response = chatModel.call(systemMessage, userMessage);
