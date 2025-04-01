@@ -27,7 +27,6 @@ spec:
       targetPort: 9092
   selector:
     app: kafka-service
-  clusterIP: None
   type: ClusterIP
 ---
 apiVersion: v1

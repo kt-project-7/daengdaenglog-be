@@ -2,6 +2,7 @@ package com.clover.controller.feign;
 
 import com.clover.dto.request.feign.FeignImageGenerateRequest;
 import com.clover.dto.request.feign.FeignPetDiaryDetailListResponse;
+import com.clover.dto.request.feign.FeignTextGenerateRequest;
 import com.clover.service.AiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +30,7 @@ public class AiFeignController {
     @Operation(summary = "AI 텍스트 생성", description = "프론트 사용 X - 백엔드 통신")
     @PostMapping("/text")
     public String generateText(
-            @RequestBody String prompt
+            @RequestBody FeignTextGenerateRequest prompt
     ) {
         return aiService.generateText(prompt);
     }
