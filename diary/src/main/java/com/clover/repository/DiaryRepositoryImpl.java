@@ -24,9 +24,14 @@ public class DiaryRepositoryImpl implements DiaryRepositoryCustom {
         return jpaQueryFactory
                 .select(Projections.constructor(DiarySimpleResponse.class,
                         diary.id,
+                        diary.petId,
                         diary.title,
                         diary.content,
-                        diary.createdDate
+                        diary.emotionType,
+                        diary.weatherType,
+                        diary.createdDate,
+                        diary.memoryUri,
+                        diary.generatedImageUri
                 ))
                 .from(diary)
                 .where(diary.petId.eq(petId))
