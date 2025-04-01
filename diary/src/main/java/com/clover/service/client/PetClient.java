@@ -19,4 +19,7 @@ public interface PetClient {
 
     @GetMapping("/feign/pets/{petId}")
     boolean validatePetId(@PathVariable Long petId, @RequestParam Long userId);
+
+    @GetMapping("/feign/pets/id")
+    List<Long> getAllPetId();
 }
