@@ -7,6 +7,7 @@ import com.clover.dto.response.DiaryDetailResponse;
 import com.clover.dto.response.PetDiaryListResponse;
 import com.clover.dto.response.TodayDiaryResponse;
 import com.clover.service.DiaryService;
+import com.clover.service.SummaryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class DiaryController {
 
     private final DiaryService diaryService;
+    private final SummaryService summaryService;
 
     @Operation(summary = "펫 다이어리 리스트 조회", description = "처음 펫 다이어리 리스트 조회")
     @GetMapping
@@ -125,6 +127,17 @@ public class DiaryController {
     ) {
         Long userId = Long.parseLong(request.getHeader("User-Id"));
         diaryService.deleteDiary(userId, diaryId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.EMPTY_RESPONSE);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<ResponseTemplate<?>> test(
+            @RequestParam Long petId
+    ) {
+        summaryService.generateSummary(petId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

@@ -57,7 +57,7 @@ public class PetService {
         diaryList.diaryList().forEach(diaryDetailResponse -> log.info(diaryDetailResponse.toString()));
 
         String pbti = aiClient.generatePbti(diaryList);
-        pet.updatePbti(pbti);
+        pet. updatePbti(pbti);
 
         return pbti;
     }

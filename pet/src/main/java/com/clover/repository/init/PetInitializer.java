@@ -1,6 +1,7 @@
 package com.clover.repository.init;
 
 import com.clover.domain.Pet;
+import com.clover.domain.type.Gender;
 import com.clover.domain.type.PetType;
 import com.clover.repository.PetRepository;
 import com.clover.util.DummyDataInit;
@@ -33,6 +34,11 @@ public class PetInitializer implements ApplicationRunner {
         Pet user1Dog = Pet.builder()
                 .userId(1L)
                 .name("멍멍이")
+                .breed("푸들")
+                .age(3)
+                .weight(5.0)
+                .gender(Gender.MALE)
+                .neutered(true)
                 .imageUri("")
                 .pbti("ISTJ")
                 .name("멍멍이")
@@ -41,6 +47,11 @@ public class PetInitializer implements ApplicationRunner {
         Pet user1Cat1 = Pet.builder()
                 .userId(1L)
                 .name("야옹이")
+                .breed("푸들")
+                .age(3)
+                .weight(5.0)
+                .gender(Gender.MALE)
+                .neutered(true)
                 .imageUri("")
                 .pbti("ENFP")
                 .name("야옹이")
@@ -49,6 +60,11 @@ public class PetInitializer implements ApplicationRunner {
         Pet user1Cat2 = Pet.builder()
                 .userId(1L)
                 .name("야옹이")
+                .breed("푸들")
+                .age(3)
+                .weight(5.0)
+                .gender(Gender.MALE)
+                .neutered(true)
                 .imageUri("")
                 .pbti("ENFP")
                 .name("야옹이")
@@ -58,6 +74,11 @@ public class PetInitializer implements ApplicationRunner {
         Pet user2Dog = Pet.builder()
                 .userId(2L)
                 .name("멍멍이")
+                .breed("푸들")
+                .age(3)
+                .weight(5.0)
+                .gender(Gender.MALE)
+                .neutered(true)
                 .imageUri("")
                 .pbti("ISTJ")
                 .name("멍멍이")
@@ -66,6 +87,11 @@ public class PetInitializer implements ApplicationRunner {
         Pet user2Cat = Pet.builder()
                 .userId(2L)
                 .name("야옹이")
+                .breed("푸들")
+                .age(3)
+                .weight(5.0)
+                .gender(Gender.MALE)
+                .neutered(true)
                 .imageUri("")
                 .pbti("ENFP")
                 .name("야옹이")
