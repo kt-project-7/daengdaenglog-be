@@ -35,4 +35,8 @@ public class GuideInitOutbox {
         this.guideId = guideId;
         this.status = status;
     }
+
+    public void updateStatus() {
+        this.status = Status.DONE;
+    }
 }
