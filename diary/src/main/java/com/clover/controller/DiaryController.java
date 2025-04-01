@@ -70,14 +70,15 @@ public class DiaryController {
     }
 
     @Operation(summary = "펫 다이어리 수정", description = "자기 자신의 펫 다이어리만 수정 가능")
-    @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(value = "/{diaryId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ResponseTemplate<?>> updateDiary(
             HttpServletRequest request,
+            @PathVariable Long diaryId,
             @RequestPart UpdateDiaryRequest updateDiaryRequest,
             @RequestPart(required = false) MultipartFile file
     ) {
         Long userId = Long.parseLong(request.getHeader("User-Id"));
-        diaryService.updateDiary(userId, updateDiaryRequest, file);
+        diaryService.updateDiary(userId, diaryId, updateDiaryRequest, file);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

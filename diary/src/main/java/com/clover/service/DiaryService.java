@@ -99,9 +99,9 @@ public class DiaryService {
      */
     @Transactional
     public void updateDiary(
-            Long userId, UpdateDiaryRequest request, MultipartFile file
+            Long userId, Long diaryId, UpdateDiaryRequest request, MultipartFile file
     ) {
-        Diary diary = diaryRepository.findById(request.diaryId())
+        Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new DiaryNotFoundException(DiaryErrorCode.DIARY_NOT_FOUND));
 
         validateIsPetOwner(userId, diary.getPetId());
