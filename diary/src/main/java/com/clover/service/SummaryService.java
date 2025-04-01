@@ -1,8 +1,12 @@
 package com.clover.service;
 
+import com.clover.domain.SummaryData;
 import com.clover.dto.request.SummaryDataRequest;
 import com.clover.dto.request.SummaryRequest;
+import com.clover.dto.response.SummaryResponse;
 import com.clover.repository.DiaryRepository;
+import com.clover.repository.SummaryDataRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,7 @@ public class SummaryService {
 
     private final KafkaProducer kafkaProducer;
     private final DiaryRepository diaryRepository;
+    private final SummaryDataRepository summaryDataRepository;
 
     public void generateSummary(Long petId) {
 
@@ -35,5 +40,21 @@ public class SummaryService {
 
         kafkaProducer.send("summary-request", summaryResponse);
 
+    }
+
+    @Transactional
+    public void saveSummary(SummaryResponse message) {
+        Optional<SummaryData> summaryData = summaryDataRepository.findByPetIdAndYearAndMonth(
+            message.petId(), message.year(), message.month());
+
+        if (summaryData.isEmpty()) {
+            summaryDataRepository.save(message.toEntity());
+        } else {
+            SummaryData existingData = summaryData.get();
+            if (!existingData.getDescription().equals(message.summary())) {  // 중복 방지
+                existingData.setDescription(message.summary());
+                summaryDataRepository.save(existingData);
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.clover.service;
 
+import com.clover.domain.Pet;
 import com.clover.dto.response.feign.FeignPetInfoResponse;
 import com.clover.repository.PetRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +37,9 @@ public class FeignPetService {
 
     public boolean validatePetId(Long petId, Long userId) {
         return petRepository.existsByIdAndUserId(petId, userId);
+    }
+
+    public List<Long> getAllPetId() {
+        return petRepository.findAll().stream().map(Pet::getId).toList();
     }
 }

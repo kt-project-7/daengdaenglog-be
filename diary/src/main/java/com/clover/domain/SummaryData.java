@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Table(name = "summary_data")
 @Getter
@@ -26,6 +27,7 @@ public class SummaryData {
     @Column(name = "month", nullable = false)
     private Long month;
 
+    @Setter
     @Column(name = "description", length = 1024)
     private String description;
 
