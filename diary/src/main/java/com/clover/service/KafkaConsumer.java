@@ -14,7 +14,7 @@ public class KafkaConsumer {
 
     private final SummaryService summaryService;
 
-    @KafkaListener(topics = "summary-response", groupId = "consumer-group")
+    @KafkaListener(topics = "summary-response", groupId = "diary-service")
     public void consumeMessage(@Payload SummaryResponse message) {
         log.info("Consumed message: {}", message);
 

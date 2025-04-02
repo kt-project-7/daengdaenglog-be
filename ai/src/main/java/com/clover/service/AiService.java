@@ -1,13 +1,15 @@
 package com.clover.service;
 
-import com.clover.dto.request.SummaryDataRequest;
-import com.clover.dto.request.SummaryDataScheduleRequest;
-import com.clover.dto.request.SummaryRequest;
+import com.clover.dto.request.*;
 import com.clover.dto.request.feign.FeignImageGenerateRequest;
 import com.clover.dto.request.feign.FeignPetDiaryDetailResponse;
+import com.clover.dto.response.GuideResponse;
 import com.clover.dto.response.SummaryResponse;
 import com.clover.dto.request.feign.FeignTextGenerateRequest;
+import com.clover.dto.response.feign.FeignPetInfoResponse;
 import com.clover.enums.PromptType;
+import com.clover.service.client.DiaryClient;
+import com.clover.service.client.PetClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.messages.SystemMessage;
@@ -29,6 +31,9 @@ public class AiService {
     private final ChatModel chatModel;
     private final KafkaProducer kafkaProducer;
 
+    private final DiaryClient diaryClient;
+    private final PetClient petClient;
+
     public String generateImage(
             FeignImageGenerateRequest input
     ) {
@@ -37,7 +42,7 @@ public class AiService {
 
         if (!response.getResults().isEmpty()) {
             // 이미지 생성 성공
-            String imageUrl =  response.getResults().getFirst().getOutput().getUrl();
+            String imageUrl =  response.getResults().get(0).getOutput().getUrl();
             log.info("Generated image URL: {}", imageUrl);
 
             return imageUrl;
@@ -133,6 +138,54 @@ public class AiService {
                 result.append("- Schedule ID: ").append(schedule.scheduleType()).append("\n")
                         .append("- Schedule Date: ").append(schedule.startHour()).append(":").append(schedule.startMinute()).append("\n");
             }
+        }
+
+        return result.toString();
+    }
+
+    public void initGuide(GuideInitRequest request) {
+        try {
+            FeignPetInfoResponse petInfo = petClient.getPetInfo(request.petId());
+            List<String> diaryList = diaryClient.getDiary(request.petId());
+
+            if (petInfo == null || diaryList == null || diaryList.isEmpty()) {
+                throw new RuntimeException("Failed to fetch pet info or diary list");
+            }
+
+            String petInfoString = formatPetInfo(petInfo);
+
+            String result = petInfoString + "\n" +
+                    "📔 Pet Diary List\n" +
+                    formatDiaryListString(diaryList);
+
+            SystemMessage systemMessage = new SystemMessage(PromptType.GUIDE.getPrompt());
+            UserMessage userMessage = new UserMessage(result);
+
+            String response = chatModel.call(systemMessage, userMessage);
+
+            log.info("Guide Init response: {}", response);
+
+            kafkaProducer.send("guide-init-response", GuideResponse.from(request, response));
+        } catch (Exception e) {
+            kafkaProducer.send("guide-init-compensation", new GuideCompensationResponse(request.guideId()));
+        }
+    }
+
+    private String formatPetInfo(FeignPetInfoResponse petInfo) {
+
+        return "🐾 Pet Information\n" +
+                "Pet ID: " + petInfo.petId() + "\n" +
+                "- Name: " + petInfo.name() + "\n" +
+                "- Image URI: " + petInfo.imageUri() + "\n" +
+                "- PBTI: " + petInfo.pbti() + "\n" +
+                "- Pet Type: " + petInfo.petType() + "\n";
+    }
+
+    private String formatDiaryListString(List<String> diaryList) {
+        StringBuilder result = new StringBuilder();
+
+        for (String diary : diaryList) {
+            result.append("- ").append(diary).append("\n");
         }
 
         return result.toString();

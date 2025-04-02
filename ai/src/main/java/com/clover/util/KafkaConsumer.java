@@ -1,5 +1,6 @@
 package com.clover.util;
 
+import com.clover.dto.request.GuideInitRequest;
 import com.clover.dto.request.SummaryRequest;
 import com.clover.service.AiService;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +16,17 @@ public class KafkaConsumer {
 
     private final AiService aiService;
 
-    @KafkaListener(topics = "summary-request", groupId = "summary-group")
+    @KafkaListener(topics = "summary-request", groupId = "ai-service")
     public void generateSummary(@Payload SummaryRequest message) {
         log.info("Consumed message: {}", message);
 
         aiService.generateSummary(message);
+    }
+
+    @KafkaListener(topics = "init-guide", groupId = "ai-service")
+    public void initGuide(@Payload GuideInitRequest request) {
+        log.info("Consumed message: {}", request);
+
+        aiService.initGuide(request);
     }
 }

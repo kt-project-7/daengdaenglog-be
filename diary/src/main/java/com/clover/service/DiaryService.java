@@ -2,6 +2,7 @@ package com.clover.service;
 
 import com.clover.domain.Diary;
 import com.clover.domain.ScheduleTime;
+import com.clover.domain.SummaryData;
 import com.clover.dto.request.CreateDiaryRequest;
 import com.clover.dto.request.UpdateDiaryRequest;
 import com.clover.dto.request.feign.FeignImageGenScheduleRequest;
@@ -15,6 +16,7 @@ import com.clover.exception.PetIdNotMatchException;
 import com.clover.exception.errorcode.DiaryErrorCode;
 import com.clover.repository.DiaryRepository;
 import com.clover.repository.ScheduleTimeRepository;
+import com.clover.repository.SummaryDataRepository;
 import com.clover.service.client.AiClient;
 import com.clover.service.client.PetClient;
 import com.clover.util.BlobUtils;
@@ -34,6 +36,8 @@ public class DiaryService {
 
     private final DiaryRepository diaryRepository;
     private final ScheduleTimeRepository scheduleTimeRepository;
+    private final SummaryDataRepository summaryDataRepository;
+
     private final PetClient petClient;
     private final AiClient aiClient;
     private final BlobUtils blobUtils;
@@ -178,5 +182,11 @@ public class DiaryService {
         if (!petClient.validatePetId(petId, userId)) {
             throw new PetIdNotMatchException(DiaryErrorCode.PET_ID_NOT_MATCH);
         }
+    }
+
+    public List<String> getSummaryDiaryList(Long petId) {
+        return summaryDataRepository.findAllByPetId(petId).stream()
+                .map(SummaryData::getDescription)
+                .toList();
     }
 }

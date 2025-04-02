@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(name = "DiaryController", description = "Diary 관련 API")
 @Slf4j
 @RequiredArgsConstructor
@@ -29,5 +31,14 @@ public class DiaryFeignController {
         log.info("getPetDiaryList - petDiaryList: {}", petDiaryList);
 
         return petDiaryList;
+    }
+
+    @Operation(summary = "요약된 펫 다이어리 리스트 조회", description = "요약된 펫 다이어리 리스트 조회")
+    @GetMapping("/diary/summary")
+    public List<String> getSummaryPetDiaryList(
+            @RequestParam Long petId
+    ) {
+
+        return diaryService.getSummaryDiaryList(petId);
     }
 }

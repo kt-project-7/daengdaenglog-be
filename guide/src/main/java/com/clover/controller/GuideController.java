@@ -1,10 +1,12 @@
 package com.clover.controller;
 
 import com.clover.dto.ResponseTemplate;
+import com.clover.dto.request.GuideGenerateRequest;
+import com.clover.dto.response.GuideDetailResponse;
+import com.clover.dto.response.GuideSimpleListResponse;
 import com.clover.service.GuideService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,19 +22,41 @@ public class GuideController {
 
     private final GuideService guideService;
 
-    //TODO: 가이드 생성 api - 최근 관찰 일지 및 펫 정보, 보험 청구 내역 가져와서 요약 정보 생성(ai 활용) - 가이드는 하나만 존재인지 물어보기
     @Operation(summary = "가이드 생성", description = "가이드 생성 요청 시 사용")
-    @GetMapping
+    @PostMapping("/{petId}")
     public ResponseEntity<ResponseTemplate<?>> generateGuide(
-            HttpServletRequest request,
-            @RequestParam Long petId
+            @PathVariable Long petId,
+            @RequestBody GuideGenerateRequest guideGenerateRequest
     ) {
-        Long userId = Long.parseLong(request.getHeader("User-Id"));
+        guideService.guideInit(petId, guideGenerateRequest);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ResponseTemplate.from(null));
     }
 
-    //TODO: 생성된 가이드 정보 조회 api - 생성된 가이드 정보 조회 요청 시 사용
+    @Operation(summary = "가이드 리스트 조회", description = "가이드 리스트 조회 요청 시 사용")
+    @GetMapping("/{petId}")
+    public ResponseEntity<ResponseTemplate<?>> getGuideList(
+            @PathVariable Long petId
+    ) {
+        GuideSimpleListResponse guideList = guideService.getGuideList(petId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.from(guideList));
+    }
+
+    @Operation(summary = "가이드 상세 조회", description = "가이드 상세 조회 요청 시 사용")
+    @GetMapping("/list/{guideId}")
+    public ResponseEntity<ResponseTemplate<?>> getGuideDetail(
+            @PathVariable Long guideId
+    ) {
+        GuideDetailResponse guideDetail = guideService.getGuideDetail(guideId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.from(guideDetail));
+    }
+
 }
