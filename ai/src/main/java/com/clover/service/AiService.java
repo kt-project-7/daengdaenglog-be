@@ -57,11 +57,7 @@ public class AiService {
         SystemMessage systemMessage = new SystemMessage(prompt.promptType().getPrompt());
         UserMessage userMessage = new UserMessage(prompt.userInput());
 
-        String response = chatModel.call(systemMessage, userMessage);
-
-        log.info("Chat response: {}", response);
-
-        return response;
+        return chatModel.call(systemMessage, userMessage);
     }
 
     public String generatePbti(
@@ -148,6 +144,8 @@ public class AiService {
             FeignPetInfoResponse petInfo = petClient.getPetInfo(request.petId());
             List<String> diaryList = diaryClient.getDiary(request.petId());
 
+            log.info("guide request guideType: {}", request.guideType());
+
             if (petInfo == null || diaryList == null || diaryList.isEmpty()) {
                 throw new RuntimeException("Failed to fetch pet info or diary list");
             }
@@ -158,7 +156,9 @@ public class AiService {
                     "📔 Pet Diary List\n" +
                     formatDiaryListString(diaryList);
 
-            SystemMessage systemMessage = new SystemMessage(PromptType.GUIDE.getPrompt());
+            String guideTypePrompt = "이 가이드를 만드는 목적과 중요한 포인트는 " + request.guideType() + "입니다.\n";
+
+            SystemMessage systemMessage = new SystemMessage(guideTypePrompt.concat(PromptType.GUIDE.getPrompt()));
             UserMessage userMessage = new UserMessage(result);
 
             String response = chatModel.call(systemMessage, userMessage);

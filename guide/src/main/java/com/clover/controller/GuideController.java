@@ -22,7 +22,8 @@ public class GuideController {
 
     private final GuideService guideService;
 
-    @Operation(summary = "가이드 생성", description = "가이드 생성 요청 시 사용")
+    @Operation(summary = "가이드 생성", description = "가이드 생성 요청 시 사용<br>" +
+            "GuideType: HOSPITAL, SITTER, KINDERGARTEN, NONE")
     @PostMapping("/{petId}")
     public ResponseEntity<ResponseTemplate<?>> generateGuide(
             @PathVariable Long petId,

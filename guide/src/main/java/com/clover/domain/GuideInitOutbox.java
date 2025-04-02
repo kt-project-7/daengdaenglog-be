@@ -1,5 +1,6 @@
 package com.clover.domain;
 
+import com.clover.domain.type.GuideType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,11 +23,16 @@ public class GuideInitOutbox {
     @Column(name = "user_id", nullable = false)
     private Long guideId;
 
+    @Column(name = "guide_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    GuideType guideType;
+
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted = false;
 
     @Builder
-    public GuideInitOutbox(Long guideId) {
+    public GuideInitOutbox(Long guideId, GuideType guideType) {
         this.guideId = guideId;
+        this.guideType = guideType;
     }
 }

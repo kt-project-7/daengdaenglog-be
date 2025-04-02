@@ -32,7 +32,7 @@ public class GuideInitEventHandler {
     public void handle(GuideInitEvent event) {
         log.info("guide outbox send: {}", event);
 
-        kafkaProducer.send("init-guide", new GuideInitRequest(event.petId(), event.guideId()));
+        kafkaProducer.send("init-guide", new GuideInitRequest(event.petId(), event.guideId(), event.guideType().name()));
         guideInitOutboxRepository.findByGuideId(event.guideId())
                 .ifPresent(guideInitOutboxRepository::delete);
     }

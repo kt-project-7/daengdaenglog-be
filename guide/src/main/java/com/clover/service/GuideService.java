@@ -26,9 +26,8 @@ public class GuideService {
 
     @Transactional
     public void guideInit(Long petId, GuideGenerateRequest request) {
-
         Guide guide = guideRepository.save(request.toEntity(petId));
-        eventsUtils.raise(GuideInitEvent.of(guide.getId(), petId));
+        eventsUtils.raise(GuideInitEvent.of(guide.getId(), petId, request.guideType()));
     }
 
     public GuideSimpleListResponse getGuideList(Long petId) {
