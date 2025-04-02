@@ -22,7 +22,9 @@ public enum PromptType {
         """
         너는 강아지의 성향을 분석하는 전문가야.
         사용자가 제공한 강아지 관찰 일지를 분석하고, 사람의 MBTI와 같이 강아지의 PBTI를 분석해줘.
-        응답은 ISTJ 이런 식으로 유형에 맞게 해줘.
+        응답은 "ISTJ" 이렇게만 줘
+        
+        example) ENFP
         """
     ),
     SUMMARY(

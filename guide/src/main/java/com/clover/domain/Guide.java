@@ -25,6 +25,7 @@ public class Guide extends BaseTimeEntity {
     private String content;
 
     @Column(name = "statud", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Builder
@@ -37,5 +38,9 @@ public class Guide extends BaseTimeEntity {
     public void updateGuide(String content) {
         this.content = content;
         this.status = Status.DONE;
+    }
+
+    public void rejectGuide() {
+        this.status = Status.REJECTED;
     }
 }

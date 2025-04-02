@@ -1,9 +1,6 @@
 package com.clover.service;
 
-import com.clover.dto.request.GuideInitRequest;
-import com.clover.dto.request.SummaryDataRequest;
-import com.clover.dto.request.SummaryDataScheduleRequest;
-import com.clover.dto.request.SummaryRequest;
+import com.clover.dto.request.*;
 import com.clover.dto.request.feign.FeignImageGenerateRequest;
 import com.clover.dto.request.feign.FeignPetDiaryDetailResponse;
 import com.clover.dto.response.GuideResponse;
@@ -147,25 +144,31 @@ public class AiService {
     }
 
     public void initGuide(GuideInitRequest request) {
-        FeignPetInfoResponse petInfo = petClient.getPetInfo(request.petId());
-        List<String> diaryList = diaryClient.getDiary(request.petId());
+        try {
+            FeignPetInfoResponse petInfo = petClient.getPetInfo(request.petId());
+            List<String> diaryList = diaryClient.getDiary(request.petId());
 
-        //TODO: diaryList가 비어 있으면 에러 처리 할건지 이야기하기(saga 관련)
+            if (petInfo == null || diaryList == null) {
+                throw new RuntimeException("Failed to fetch pet info or diary list");
+            }
 
-        String petInfoString = formatPetInfo(petInfo);
+            String petInfoString = formatPetInfo(petInfo);
 
-        String result = petInfoString + "\n" +
-                "📔 Pet Diary List\n" +
-                formatDiaryListString(diaryList);
+            String result = petInfoString + "\n" +
+                    "📔 Pet Diary List\n" +
+                    formatDiaryListString(diaryList);
 
-        SystemMessage systemMessage = new SystemMessage(PromptType.GUIDE.getPrompt());
-        UserMessage userMessage = new UserMessage(result);
+            SystemMessage systemMessage = new SystemMessage(PromptType.GUIDE.getPrompt());
+            UserMessage userMessage = new UserMessage(result);
 
-        String response = chatModel.call(systemMessage, userMessage);
+            String response = chatModel.call(systemMessage, userMessage);
 
-        log.info("Guide Init response: {}", response);
+            log.info("Guide Init response: {}", response);
 
-        kafkaProducer.send("guide-init-response", GuideResponse.from(request, response));
+            kafkaProducer.send("guide-init-response", GuideResponse.from(request, response));
+        } catch (Exception e) {
+            kafkaProducer.send("guide-init-compensation", new GuideCompensationResponse(request.guideId()));
+        }
     }
 
     private String formatPetInfo(FeignPetInfoResponse petInfo) {

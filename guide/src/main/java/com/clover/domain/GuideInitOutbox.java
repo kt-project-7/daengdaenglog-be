@@ -1,6 +1,5 @@
 package com.clover.domain;
 
-import com.clover.domain.type.Status;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,20 +22,11 @@ public class GuideInitOutbox {
     @Column(name = "user_id", nullable = false)
     private Long guideId;
 
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Status status;
-
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted = false;
 
     @Builder
-    public GuideInitOutbox(Long guideId, Status status) {
+    public GuideInitOutbox(Long guideId) {
         this.guideId = guideId;
-        this.status = status;
-    }
-
-    public void updateStatus() {
-        this.status = Status.DONE;
     }
 }

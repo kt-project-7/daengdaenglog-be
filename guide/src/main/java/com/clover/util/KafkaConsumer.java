@@ -1,8 +1,8 @@
 package com.clover.util;
 
-import com.clover.domain.GuideInitOutbox;
+import com.clover.domain.Guide;
+import com.clover.dto.response.GuideCompensationResponse;
 import com.clover.dto.response.GuideResponse;
-import com.clover.repository.GuideInitOutboxRepository;
 import com.clover.repository.GuideRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,16 +18,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class KafkaConsumer {
 
     private final GuideRepository guideRepository;
-    private final GuideInitOutboxRepository guideInitOutboxRepository;
 
-    @KafkaListener(topics = "guide-init-response", groupId = "guide-group")
+    @KafkaListener(topics = "guide-init-response", groupId = "guide-service")
     public void generateSummary(@Payload GuideResponse message) {
         log.info("Consumed message: {}", message);
 
         guideRepository.findById(message.guideId())
-                .ifPresent(guide ->  guide.updateGuide(message.description()));
+                .ifPresent(guide -> guide.updateGuide(message.description()));
+    }
 
-        guideInitOutboxRepository.findByGuideId(message.guideId())
-                .ifPresent(GuideInitOutbox::updateStatus);
+    @KafkaListener(topics = "guide-init-compensation", groupId = "guide-service")
+    public void compensation(@Payload GuideCompensationResponse message) {
+        log.info("Consumed message: {}", message);
+
+        guideRepository.findById(message.guideId())
+                .ifPresent(Guide::rejectGuide);
     }
 }
