@@ -13,6 +13,7 @@ public record GuideGenerateRequest(
         return Guide.builder()
                 .petId(petId)
                 .status(Status.PENDING)
+                .guideType(guideType)
                 .build();
     }
 }

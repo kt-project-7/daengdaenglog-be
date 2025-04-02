@@ -7,6 +7,7 @@ import com.clover.dto.response.GuideSimpleListResponse;
 import com.clover.service.GuideService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -37,11 +38,12 @@ public class GuideController {
     }
 
     @Operation(summary = "가이드 리스트 조회", description = "가이드 리스트 조회 요청 시 사용")
-    @GetMapping("/{petId}")
+    @GetMapping
     public ResponseEntity<ResponseTemplate<?>> getGuideList(
-            @PathVariable Long petId
+            HttpServletRequest request
     ) {
-        GuideSimpleListResponse guideList = guideService.getGuideList(petId);
+        Long userId = Long.parseLong(request.getHeader("User-Id"));
+        GuideSimpleListResponse guideList = guideService.getGuideList(userId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

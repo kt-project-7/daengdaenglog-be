@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface GuideRepository extends JpaRepository<Guide, Long> {
 
-    List<Guide> findAllByPetId(Long petId);
+    List<Guide> findAllByPetIdInOrderByCreatedDateDesc(List<Long> petIds);
 }

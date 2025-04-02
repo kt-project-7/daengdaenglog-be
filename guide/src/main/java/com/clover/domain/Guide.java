@@ -1,5 +1,6 @@
 package com.clover.domain;
 
+import com.clover.domain.type.GuideType;
 import com.clover.domain.type.Status;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -24,14 +25,19 @@ public class Guide extends BaseTimeEntity {
     @Column(name = "content", length = 1024)
     private String content;
 
+    @Column(name = "guide_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private GuideType guideType;
+
     @Column(name = "statud", nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @Builder
-    public Guide(Long petId, String content, Status status) {
+    public Guide(Long petId, String content, GuideType guideType, Status status) {
         this.petId = petId;
         this.content = content;
+        this.guideType = guideType;
         this.status = status;
     }
 
