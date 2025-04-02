@@ -133,8 +133,9 @@ public class DiaryController {
                 .body(ResponseTemplate.EMPTY_RESPONSE);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<ResponseTemplate<?>> test(
+    @Operation(summary = "펫 다이어리 요약 생성", description = "펫 다이어리 요약 생성(프론트 사용 X)")
+    @GetMapping("/summary_test")
+    public ResponseEntity<ResponseTemplate<?>> summaryTest(
             @RequestParam Long petId
     ) {
         summaryService.generateSummary(petId);

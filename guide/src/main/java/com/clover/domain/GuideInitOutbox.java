@@ -23,6 +23,9 @@ public class GuideInitOutbox {
     @Column(name = "user_id", nullable = false)
     private Long guideId;
 
+    @Column(name = "pet_id", nullable = false)
+    private Long petId;
+
     @Column(name = "guide_type", nullable = false)
     @Enumerated(EnumType.STRING)
     GuideType guideType;
@@ -31,8 +34,9 @@ public class GuideInitOutbox {
     private Boolean isDeleted = false;
 
     @Builder
-    public GuideInitOutbox(Long guideId, GuideType guideType) {
+    public GuideInitOutbox(Long guideId, Long petId, GuideType guideType) {
         this.guideId = guideId;
+        this.petId = petId;
         this.guideType = guideType;
     }
 }

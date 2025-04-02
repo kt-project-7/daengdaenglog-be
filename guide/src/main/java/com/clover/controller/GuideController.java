@@ -33,7 +33,7 @@ public class GuideController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ResponseTemplate.from(null));
+                .body(ResponseTemplate.EMPTY_RESPONSE);
     }
 
     @Operation(summary = "가이드 리스트 조회", description = "가이드 리스트 조회 요청 시 사용")

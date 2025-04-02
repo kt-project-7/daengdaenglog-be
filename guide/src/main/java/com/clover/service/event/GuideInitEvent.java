@@ -15,6 +15,7 @@ public record GuideInitEvent(
         return GuideInitOutbox.builder()
                 .guideId(guideId)
                 .guideType(guideType)
+                .petId(petId)
                 .build();
     }
 

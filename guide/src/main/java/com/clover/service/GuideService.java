@@ -5,6 +5,7 @@ import com.clover.dto.request.GuideGenerateRequest;
 import com.clover.dto.response.GuideDetailResponse;
 import com.clover.dto.response.GuideSimpleListResponse;
 import com.clover.dto.response.GuideSimpleResponse;
+import com.clover.repository.GuideInitOutboxRepository;
 import com.clover.repository.GuideRepository;
 import com.clover.service.event.GuideInitEvent;
 import com.clover.util.EventsUtils;
@@ -22,6 +23,7 @@ import java.util.List;
 public class GuideService {
 
     private final GuideRepository guideRepository;
+    private final GuideInitOutboxRepository guideInitOutboxRepository;
     private final EventsUtils eventsUtils;
 
     @Transactional
@@ -43,5 +45,10 @@ public class GuideService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 가이드가 없습니다."));
 
         return GuideDetailResponse.from(guide);
+    }
+
+    public void regenerateGuide() {
+        guideInitOutboxRepository.findAllByIsDeletedFalse()
+                .forEach(outbox -> eventsUtils.raise(GuideInitEvent.of(outbox.getGuideId(), outbox.getPetId(), outbox.getGuideType())));
     }
 }
