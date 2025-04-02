@@ -148,7 +148,7 @@ public class AiService {
             FeignPetInfoResponse petInfo = petClient.getPetInfo(request.petId());
             List<String> diaryList = diaryClient.getDiary(request.petId());
 
-            if (petInfo == null || diaryList == null) {
+            if (petInfo == null || diaryList == null || diaryList.isEmpty()) {
                 throw new RuntimeException("Failed to fetch pet info or diary list");
             }
 

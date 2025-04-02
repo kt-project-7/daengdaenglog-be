@@ -2,6 +2,8 @@ package com.clover.controller;
 
 import com.clover.dto.ResponseTemplate;
 import com.clover.dto.request.GuideGenerateRequest;
+import com.clover.dto.response.GuideDetailResponse;
+import com.clover.dto.response.GuideSimpleListResponse;
 import com.clover.service.GuideService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,7 +35,28 @@ public class GuideController {
                 .body(ResponseTemplate.from(null));
     }
 
-    //TODO: 생성된 가이드 상세 정보 조회 api - 생성된 가이드 정보 조회 요청 시 사용
+    @Operation(summary = "가이드 리스트 조회", description = "가이드 리스트 조회 요청 시 사용")
+    @GetMapping("/{petId}")
+    public ResponseEntity<ResponseTemplate<?>> getGuideList(
+            @PathVariable Long petId
+    ) {
+        GuideSimpleListResponse guideList = guideService.getGuideList(petId);
 
-    //TODO: 가이드 리스트 조회 api
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.from(guideList));
+    }
+
+    @Operation(summary = "가이드 상세 조회", description = "가이드 상세 조회 요청 시 사용")
+    @GetMapping("/list/{guideId}")
+    public ResponseEntity<ResponseTemplate<?>> getGuideDetail(
+            @PathVariable Long guideId
+    ) {
+        GuideDetailResponse guideDetail = guideService.getGuideDetail(guideId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.from(guideDetail));
+    }
+
 }

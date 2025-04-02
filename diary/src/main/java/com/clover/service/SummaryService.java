@@ -38,14 +38,17 @@ public class SummaryService {
 
         SummaryRequest summaryResponse = SummaryRequest.of(petId, (long) startDate.getYear(), (long) startDate.getMonthValue(), dataRequests);
 
-        kafkaProducer.send("summary-request", summaryResponse);
+        log.info("summaryResponse: {}", summaryResponse);
 
+        kafkaProducer.send("summary-request", summaryResponse);
     }
 
     @Transactional
     public void saveSummary(SummaryResponse message) {
         Optional<SummaryData> summaryData = summaryDataRepository.findByPetIdAndYearAndMonth(
             message.petId(), message.year(), message.month());
+
+        log.info("save summaryData: {}", summaryData);
 
         if (summaryData.isEmpty()) {
             summaryDataRepository.save(message.toEntity());

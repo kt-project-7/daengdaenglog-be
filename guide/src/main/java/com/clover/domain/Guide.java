@@ -21,7 +21,7 @@ public class Guide extends BaseTimeEntity {
     @Column(name = "pet_id", nullable = false)
     private Long petId;
 
-    @Column(name = "content")
+    @Column(name = "content", length = 1024)
     private String content;
 
     @Column(name = "statud", nullable = false)
