@@ -38,9 +38,8 @@ public enum PromptType {
         """
     ),
     //TODO: 프롬프팅 더 하기
-    GUIDE(
+    NORMAL(
         """
-        너는 강아지의 건강을 관리하는 의료인이야.
         사용자가 제공한 강아지 관찰 일지를 분석하고, 건강에 대한 중요한 정보를 추출해서 전달해줘.\s
         또한, 날짜별 관찰 내용 중 특이사항만 종합적으로 요약해줘. 좀 자세히 적어줘 200자 정도로
         한국어로 응답해줘
@@ -52,5 +51,13 @@ public enum PromptType {
 
     PromptType(String prompt) {
         this.prompt = prompt;
+    }
+
+    public static PromptType fromGuideType(String guideType) {
+        try {
+            return PromptType.valueOf(guideType.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return NORMAL; // 기본값 설정
+        }
     }
 }

@@ -158,7 +158,7 @@ public class AiService {
 
             String guideTypePrompt = "이 가이드를 만드는 목적과 중요한 포인트는 " + request.guideType() + "입니다.\n";
 
-            SystemMessage systemMessage = new SystemMessage(guideTypePrompt.concat(PromptType.GUIDE.getPrompt()));
+            SystemMessage systemMessage = new SystemMessage(guideTypePrompt.concat(PromptType.fromGuideType(request.guideType()).getPrompt()));
             UserMessage userMessage = new UserMessage(result);
 
             String response = chatModel.call(systemMessage, userMessage);
