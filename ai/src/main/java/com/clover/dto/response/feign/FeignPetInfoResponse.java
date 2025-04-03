@@ -5,7 +5,10 @@ public record FeignPetInfoResponse(
         String name,
         String imageUri,
         String pbti,
-        String petType
+        String petType,
+        String breed,
+        Integer age,
+        String gender
 ) {
 
 }

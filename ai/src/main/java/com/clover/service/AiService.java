@@ -158,6 +158,8 @@ public class AiService {
 
             String guideTypePrompt = "이 가이드를 만드는 목적과 중요한 포인트는 " + request.guideType() + "입니다.\n";
 
+            log.info("result: {}", result);
+
             SystemMessage systemMessage = new SystemMessage(guideTypePrompt.concat(PromptType.fromGuideType(request.guideType()).getPrompt()));
             UserMessage userMessage = new UserMessage(result);
 
@@ -175,7 +177,10 @@ public class AiService {
 
         return "🐾 Pet Information\n" +
                 "Pet ID: " + petInfo.petId() + "\n" +
-                "- Name: " + petInfo.name() + "\n" +
+                "- 이름: " + petInfo.name() + "\n" +
+                "- 나이: " + petInfo.age() + "\n" +
+                "- 성별: " + petInfo.gender() + "\n" +
+                "- 품종: " + petInfo.breed() + "\n" +
                 "- Image URI: " + petInfo.imageUri() + "\n" +
                 "- PBTI: " + petInfo.pbti() + "\n" +
                 "- Pet Type: " + petInfo.petType() + "\n";
